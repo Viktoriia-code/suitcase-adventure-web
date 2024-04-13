@@ -4,7 +4,7 @@ function getAirportList() {
   fetch(`http://127.0.0.1:5000/user/game/airport`)
     .then(response => response.json())
     .then(data => {
-      console.log(data);
+      //console.log(data);
       let table = document.getElementById("list");
       table.innerHTML = '';
 
@@ -20,7 +20,7 @@ function getPlayerData() {
   fetch(`http://127.0.0.1:5000/user/data`)
     .then(response => response.json())
     .then(data => {
-      console.log(data);
+      //console.log(data);
       document.getElementById("user-name").innerText = data.name;
       document.getElementById("distance").innerHTML = `<td>${data.distance_to_target} km</td>`;
       document.getElementById("co2").innerHTML = `<td>${data.co2_consumed} kg</td>`;

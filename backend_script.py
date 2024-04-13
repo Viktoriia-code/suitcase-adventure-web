@@ -50,7 +50,6 @@ def fetch_random_large():
                     "long": myresult[index][5],
                 }
                 available_airports.append(airport_json)
-        print(available_airports)
         #random.shuffle(available_airports)
         return available_airports
     except:
@@ -113,7 +112,7 @@ def fetch_game_airports():
                 "long": airport[6],
             }
             available_airports.append(airport_data_json)
-        print(available_airports)
+        #print(available_airports)
         return available_airports
     except:
         return "The airport search could not be performed."
