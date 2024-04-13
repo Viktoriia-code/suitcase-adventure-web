@@ -1,6 +1,6 @@
 # suitcase-adventure-web
 
-## Modules:
+## :electric_plug: Modules:
 * mysql-connector-python
 * flask
 * python-dotenv
