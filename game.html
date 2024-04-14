@@ -6,6 +6,7 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <link rel="icon" href="assets/favicon.ico">
     <link rel="stylesheet" type="text/css" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
 
@@ -13,14 +14,35 @@
 <body>
     <header>
         <div class="logo">
-            <div class="logo-img">🛫</div>
+            <div class="logo-img">✈️</div>
             <h1>Suitcase<br>Adventure</h1>
         </div>
-        <span id="user-name"></span>
+        <div class="nav">
+            <div id="music" class="nav-btn">
+                <img src="assets/music.png" alt="Music" class="nav-btn-img">
+                Music
+            </div>
+            <div id="stats" class="nav-btn">
+                <img src="assets/analytics.png" alt="Stats" class="nav-btn-img">
+                Stats
+            </div>
+            <div id="rules" class="nav-btn">
+                <img src="assets/rules.png" alt="Rules" class="nav-btn-img">
+                Rules
+            </div>
+            <div id="signout" class="nav-btn">
+                <img src="assets/logout.png" alt="Sign Out" class="nav-btn-img">
+                Exit
+            </div>
+            <div class="nav-btn">
+                <img src="assets/user.png" alt="Profile photo" class="nav-btn-img">
+                <span id="user-name"></span>
+            </div>
+        </div>
     </header>
     <main>
         <div id="map" style="height: 700px;width:40%"></div>
-        <table>
+        <table class="data-table">
             <thead>
             <tr>
                 <th>ICAO</th>
@@ -34,7 +56,7 @@
         </table>
         <div class="game-data">
             <div id="player-data"></div>
-            <table>
+            <table class="data-table">
                 <thead>
                     <tr>
                         <th colspan="2">You are now at:</th>
@@ -44,7 +66,7 @@
                 <!-- Table rows will be dynamically added here -->
                 </tbody>
             </table>
-            <table style="width:100%;">
+            <table style="width:100%;" class="data-table">
                 <thead>
                     <tr>
                         <th>Distance to the target:</th>
@@ -63,6 +85,18 @@
                 </tbody>
             </table>
         </div>
+        <!--<div class="game-data">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th colspan="2">Information about the country:</th>
+                    </tr>
+                </thead>
+                <tbody id="current-country">
+                    Table rows will be dynamically added here
+                </tbody>
+            </table>
+        </div>-->
     </main>
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />

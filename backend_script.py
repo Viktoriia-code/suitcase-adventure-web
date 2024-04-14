@@ -1,13 +1,19 @@
-import mysql.connector
-from flask import Flask
-import os
-from dotenv import load_dotenv
-import random
 import json
+import os
 
+import mysql.connector
+from dotenv import load_dotenv
+from flask import Flask, request
 from flask_cors import CORS
+import random
+from flask import jsonify
 
 load_dotenv()
+
+app = Flask(__name__)
+
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 connection = mysql.connector.connect(
          host='127.0.0.1',
@@ -22,44 +28,42 @@ app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
+cursor = connection.cursor()
+
 @app.route('/airport/random_large')
 def fetch_random_large():
     continents = ["AF", "AS", "EU", "NA", "OC", "SA"]
     from_each_continent = 5
-    try:
-        available_airports = []
-        cursor = connection.cursor()
-        for continent in continents:
-            sql = f"""
+
+    available_airports = []
+    for continent in continents:
+        sql = f"""
                 SELECT airport.ident, airport.name, airport.municipality, country.name, airport.latitude_deg, airport.longitude_deg FROM airport
                 LEFT JOIN country
                 ON airport.iso_country = country.iso_country
                 WHERE airport.type = "large_airport"
                 AND country.continent = "{continent}"
-            """
-            cursor.execute(sql)
-            myresult = cursor.fetchall()
-            random.shuffle(myresult)
-            for index in range(from_each_continent):
-                airport_json = {
-                    "ICAO": myresult[index][0],
-                    "airport_name": myresult[index][1],
-                    "airport_city": myresult[index][2],
-                    "country": myresult[index][3],
-                    "lat": myresult[index][4],
-                    "long": myresult[index][5],
-                }
-                available_airports.append(airport_json)
+        """
+        cursor.execute(sql)
+        myresult = cursor.fetchall()
+        random.shuffle(myresult)
+        for index in range(from_each_continent):
+            airport_json = {
+                "ICAO": myresult[index][0],
+                "airport_name": myresult[index][1],
+                "airport_city": myresult[index][2],
+                "country": myresult[index][3],
+                "lat": myresult[index][4],
+                "long": myresult[index][5],
+            }
+            available_airports.append(airport_json)
         #random.shuffle(available_airports)
-        return available_airports
-    except:
-        return "The airport search could not be performed."
+    return jsonify(available_airports)
 
 @app.route('/user/data')
 def fetch_player_data():
     game_id = 109
     try:
-        cursor = connection.cursor()
         player_location = f"""
             SELECT game.*, airport.name, airport.municipality, country.name, player.name
             FROM game 
@@ -70,6 +74,7 @@ def fetch_player_data():
         """
         cursor.execute(player_location)
         player_data = cursor.fetchone()
+        print(player_data)
 
         player_data_json = {
             "player_id": player_data[1],
@@ -84,15 +89,14 @@ def fetch_player_data():
             "name": player_data[11],
         }
         return player_data_json
-    except:
-        return "The airport search could not be performed."
+    except Exception as e:
+        return str(e)
 
 @app.route('/user/game/airport')
 def fetch_game_airports():
     game_id = 109
     available_airports = []
     try:
-        cursor = connection.cursor()
         player_location = f"""
             SELECT available_airport.*, airport.name, airport.municipality, country.name, airport.latitude_deg, airport.longitude_deg 
             FROM available_airport 
@@ -114,8 +118,25 @@ def fetch_game_airports():
             available_airports.append(airport_data_json)
         #print(available_airports)
         return available_airports
-    except:
-        return "The airport search could not be performed."
+    except Exception as e:
+        return str(e)
+
+@app.route('/users/<username>/<password>')
+def login_user(username, password):
+    sql = "SELECT * FROM player WHERE name=%s AND password=%s"
+    val = (username, password)
+
+    cursor.execute(sql, val)
+    result = cursor.fetchone()
+
+    if result:
+        user_json = {
+            "username": result[1],
+            "password": result[2],
+        }
+        return user_json
+    else:
+        return "Sorry, wrong username or password. Try again.", 401
 
 
 if __name__ == '__main__':

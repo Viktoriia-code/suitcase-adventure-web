@@ -5,10 +5,17 @@ body {
   font-style: normal;
   font-size: 18px;
 }
+.login-body {
+  background: linear-gradient(90deg, hsla(212, 100%, 88%, 1) 1%, hsla(0, 0%, 100%, 1) 51%, hsla(55, 100%, 65%, 1) 100%);
+}
 h1 {
   font-weight: 500;
   font-size: 25px;
   line-height: 25px;
+}
+h2 {
+  font-weight: 500;
+  font-size: 25px;
 }
 header {
   background: linear-gradient(90deg, hsla(212, 100%, 88%, 1) 1%, hsla(0, 0%, 100%, 1) 51%, hsla(55, 100%, 65%, 1) 100%);
@@ -25,27 +32,95 @@ header {
 .logo-img {
   font-size: 30px;
 }
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.nav-btn-img {
+  width: 28px;
+}
 main {
   display: flex;
   gap: 10px;
 }
 
-table {
+.data-table {
   border-collapse: collapse;
   color: white;
 }
-thead tr {
+.data-table thead tr {
   background-color: #000089;
 }
-tbody tr:nth-child(odd) {
+.data-table tbody tr:nth-child(odd) {
   background-color: #0070e9;
 }
-tbody tr:nth-child(even) {
+.data-table tbody tr:nth-child(even) {
   background-color: #0685f8;
 }
-th, td {
+.data-table th, td {
   padding: 2px 25px 2px 4px;
 }
 .game-data {
 
+}
+
+.login-wrapper {
+  margin: 10% auto;
+  box-shadow: rgba(149, 157, 165, 0.9) 0px 8px 24px;
+  border-radius: 5px;
+}
+
+.title {
+  background-color: #000089;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  border-radius: 5px 5px 0 0;
+}
+.user-form {
+  background-color: #0070e9;
+  padding: 30px;
+  color: white;
+  border-radius: 0 0 5px 5px;
+  text-align: center;
+}
+
+input {
+  background-color: #0685f8;
+  border: 1px white solid;
+  border-radius: 5px;
+  font-size: inherit;
+  color: white;
+  padding: 10px;
+}
+
+.accent-btn {
+  background-color: #fff278;
+  color: black;
+  border: 1px #000089 solid;
+  font-size: 18px;
+  padding: 10px 50px;
+  font-weight: 600;
+}
+
+.login-table {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.login-table tr {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+.text-input {
+  width: 100%;
 }
