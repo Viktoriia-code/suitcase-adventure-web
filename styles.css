@@ -41,6 +41,7 @@ header {
   display: flex;
   align-items: center;
   gap: 10px;
+  cursor: pointer;
 }
 .nav-btn-img {
   width: 28px;
