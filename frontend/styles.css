@@ -125,3 +125,36 @@ input {
 .text-input {
   width: 100%;
 }
+
+/* Fly button from the map */
+
+h5 {
+  color: #0685f8;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}
+
+.fly-button {
+  background-color: #0685f8;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+.fly-button:hover {
+  background-color: #000089;
+  cursor:pointer;
+}
+
+/* Leaflet icons */
+
+.green-icon {
+  /* background-color: #27ba35; */
+  background-image: url("/assets/travel-bag.png")
+
+  /* border-radius: 50%;
+  border: 5px solid rgba(255, 255, 255, 0.5); */
+} 
