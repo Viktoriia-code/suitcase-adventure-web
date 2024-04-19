@@ -62,7 +62,7 @@ def fetch_random_large():
 
 @app.route('/user/data')
 def fetch_player_data():
-    game_id = 109
+    game_id = 3
     try:
         player_location = f"""
             SELECT game.*, airport.name, airport.municipality, country.name, player.name
@@ -70,7 +70,7 @@ def fetch_player_data():
             LEFT JOIN airport ON game.current_location = airport.ident
             LEFT JOIN country ON airport.iso_country = country.iso_country
             LEFT JOIN player ON game.player_id = player.id
-            WHERE game.id = '109'
+            WHERE game.id = '3'
         """
         cursor.execute(player_location)
         player_data = cursor.fetchone()
@@ -94,7 +94,7 @@ def fetch_player_data():
 
 @app.route('/user/game/airport')
 def fetch_game_airports():
-    game_id = 109
+    game_id = 3
     available_airports = []
     try:
         player_location = f"""
@@ -102,7 +102,7 @@ def fetch_game_airports():
             FROM available_airport 
             LEFT JOIN airport ON available_airport.airport_ident = airport.ident
             LEFT JOIN country ON airport.iso_country = country.iso_country
-            WHERE game_id = '109'
+            WHERE game_id = '3'
         """
         cursor.execute(player_location)
         player_data = cursor.fetchall()

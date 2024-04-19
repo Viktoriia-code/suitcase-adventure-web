@@ -1,2 +1,4 @@
-.env
-.venv
+.idea
+backend/.env
+backend/.venv
+backend/.idea
