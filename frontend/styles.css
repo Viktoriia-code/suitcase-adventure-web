@@ -1,4 +1,7 @@
 * { margin: 0; padding: 0; }
+.waiting * {
+  cursor: wait !important;
+}
 body {
   font-family: "Rubik", sans-serif;
   font-weight: 400;
@@ -92,7 +95,7 @@ main {
   text-align: center;
 }
 
-input {
+button, input {
   background-color: #0685f8;
   border: 1px white solid;
   border-radius: 5px;
@@ -108,6 +111,7 @@ input {
   font-size: 18px;
   padding: 10px 50px;
   font-weight: 600;
+  cursor: pointer;
 }
 
 .login-table {
@@ -124,6 +128,31 @@ input {
 }
 .text-input {
   width: 100%;
+}
+
+#login-title h2 {
+  display: flex;
+}
+.login-select {
+  display: none;
+}
+.login-select + label {
+  width: 100%;
+  transition: 0.3s;
+}
+.login-select:checked + label {
+  text-decoration: underline 2px #c4c4c4;
+}
+.login-select:not(:checked) + label {
+  font-weight: 350;
+}
+.login-select + label:hover {
+  background-color: #0000a1;
+  box-shadow: 0 0 8px 8px #000089 inset;
+  cursor: pointer;
+}
+label + .login-select + label {
+  border-left: white 0.1rem solid;
 }
 
 /* Fly button from the map */

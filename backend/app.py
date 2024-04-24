@@ -220,5 +220,43 @@ def login_user(username, password):
         return "Sorry, wrong username or password. Try again.", 401
 
 
+@app.route('/register/<username>/<password>')
+def register_user(username, password):
+    """
+    register new user
+    """
+    # Check if username length is valid
+    if len(username) < 3 or len(username) > 20:
+        return "Username is too short or long. Try again.", 400
+
+    # Check if username already exists
+    cursor = connection.cursor()
+    cursor.execute("SELECT name FROM player WHERE name = %s", (username,))
+    if cursor.fetchone() is not None:
+        cursor.close()
+        return "Username already exists. Try again.", 400
+    cursor.reset()
+
+    # Check if password length is valid
+    if len(password) < 4 or len(password) > 50:
+        cursor.close()
+        return "Password is too short or long. Try again.", 400
+
+    # Find the maximum id value currently in use
+    cursor.execute("SELECT MAX(id) FROM player")
+    max_id_result = cursor.fetchone()
+    max_id = max_id_result[0] if max_id_result[0] is not None else 0
+    new_id = max_id + 1
+    cursor.reset()
+
+    # Insert the airport into the MySQL database with a new id
+    insert_query = "INSERT INTO player (id, name, password) VALUES (%s, %s, %s)"
+    cursor.execute(insert_query, (new_id, username, password))
+    cursor.close()
+
+    # Check that login can be done successfully after creating the user and return the login result
+    return login_user(username, password)
+
+
 if __name__ == '__main__':
     app.run(use_reloader=True, host='127.0.0.1', port=5000)
