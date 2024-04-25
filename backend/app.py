@@ -1,5 +1,6 @@
 import json
 import os
+import config
 
 import mysql.connector
 from dotenv import load_dotenv
@@ -8,6 +9,8 @@ from flask_cors import CORS
 import random
 from flask import jsonify
 from geopy.distance import distance
+
+from airport import Airport
 
 load_dotenv()
 
@@ -25,6 +28,8 @@ connection = mysql.connector.connect(
          autocommit=True
         )
 
+config.conn = connection
+
 app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -34,11 +39,11 @@ cursor = connection.cursor()
 
 def fetch_random_large() -> list:
     """
-    returns the list of airports, 5 from each continent' ICAO-codes
+    returns the list of airports, 5 from each continents ICAO-codes
     """
     continents = ["AF", "AS", "EU", "NA", "OC", "SA"]
 
-    from_each_continent = 5  # max 17 as just 17 airports in OC continent
+    from_each_continent = config.airports_from_each_continent  # max 17 as just 17 airports in OC continent
 
     try:
         available_airports = []
@@ -75,12 +80,12 @@ def emission_calcs(distance_in_km: float) -> float:
     source2: https://www.statista.com/statistics/1185559/carbon-footprint-of-travel-per-kilometer-by-mode-of-transport/ \n
     source3: https://dbpedia.org/page/Flight_length
     """
-    if distance_in_km < 1100:
-        return distance_in_km * 0.245
-    elif 1100 <= distance_in_km < 2000:
-        return distance_in_km * 0.151
+    if distance_in_km < config.small_distance:
+        return distance_in_km * config.coeff_small_distance
+    elif config.small_distance <= distance_in_km < config.medium_distance:
+        return distance_in_km * config.coeff_medium_distance
     else:
-        return distance_in_km * 0.148
+        return distance_in_km * config.coeff_big_distance
 
 
 def distance_calcs(icao1: str, icao2: str) -> float:
@@ -201,6 +206,11 @@ def flyto(game_id, icao):
 
     return jsonify({"win": current_location == target_location})
 
+
+@app.route('/airport/data/<icao>')
+def get_airport_data(icao):
+    airport = Airport(ident=icao)
+    return jsonify(airport.get_data())
 
 @app.route('/users/<username>/<password>')
 def login_user(username, password):
