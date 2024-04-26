@@ -8,3 +8,8 @@ function userLoginOut() {
     // Redirect user to another page
     window.location.href = 'login.html';
 }
+
+function openStats() {
+    const dialog = document.getElementById("game-dialog");
+    dialog.showModal();
+}
