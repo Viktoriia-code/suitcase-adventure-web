@@ -114,8 +114,28 @@ def distance_calcs(icao1: str, icao2: str) -> float:
     return distance(coordinates[0], coordinates[1]).km
 
 
-@app.route('/status/<game_id>')
-def fetch_player_data(game_id):
+def check_new_user(username):
+    try:
+        players_game = f"""
+        SELECT game.player_id FROM game
+        LEFT JOIN player ON game.player_id = player.id
+        WHERE player.name = '{username}'
+        """
+        cursor.execute(players_game)
+        players_game_data = cursor.fetchall()
+        if len(players_game_data) == 0:
+            #here we can create the game for just registered users
+            return True
+        else:
+            return False
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/users/<username>')
+def fetch_player_data(username):
+    new_user = check_new_user(username)
+    print(new_user)
+
     try:
         player_location = f"""
             SELECT game.*, airport.name, airport.municipality, country.name, player.name
@@ -123,23 +143,32 @@ def fetch_player_data(game_id):
             LEFT JOIN airport ON game.current_location = airport.ident
             LEFT JOIN country ON airport.iso_country = country.iso_country
             LEFT JOIN player ON game.player_id = player.id
-            WHERE game.id = '{game_id}'
+            WHERE player.name = '{username}'
         """
         cursor.execute(player_location)
         player_data = cursor.fetchone()
         print(player_data)
 
+        game_id = player_data[0]
+
+        if player_data[7] == 1:
+            #create a new game here and give its id to variable game_id
+            pass
+
         player_data_json = {
+            "game_id": game_id,
             "player_id": player_data[1],
             "current_location": player_data[2],
             "target_location": player_data[3],
             "co2_consumed": player_data[4],
             "flights_num": player_data[5],
             "distance_to_target": player_data[6],
+            "game_completed": player_data[7],
             "airport_name": player_data[8],
             "airport_city": player_data[9],
             "airport_country": player_data[10],
             "name": player_data[11],
+            "new_user": new_user,
         }
         return player_data_json
     except Exception as e:
@@ -228,6 +257,44 @@ def login_user(username, password):
         return user_json
     else:
         return "Sorry, wrong username or password. Try again.", 401
+
+
+@app.route('/register/<username>/<password>')
+def register_user(username, password):
+    """
+    register new user
+    """
+    # Check if username length is valid
+    if len(username) < 3 or len(username) > 20:
+        return "Username is too short or long. Try again.", 400
+
+    # Check if username already exists
+    cursor = connection.cursor()
+    cursor.execute("SELECT name FROM player WHERE name = %s", (username,))
+    if cursor.fetchone() is not None:
+        cursor.close()
+        return "Username already exists. Try again.", 400
+    cursor.reset()
+
+    # Check if password length is valid
+    if len(password) < 4 or len(password) > 50:
+        cursor.close()
+        return "Password is too short or long. Try again.", 400
+
+    # Find the maximum id value currently in use
+    cursor.execute("SELECT MAX(id) FROM player")
+    max_id_result = cursor.fetchone()
+    max_id = max_id_result[0] if max_id_result[0] is not None else 0
+    new_id = max_id + 1
+    cursor.reset()
+
+    # Insert the airport into the MySQL database with a new id
+    insert_query = "INSERT INTO player (id, name, password) VALUES (%s, %s, %s)"
+    cursor.execute(insert_query, (new_id, username, password))
+    cursor.close()
+
+    # Check that login can be done successfully after creating the user and return the login result
+    return login_user(username, password)
 
 
 if __name__ == '__main__':
