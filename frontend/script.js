@@ -8,13 +8,13 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 // in the future, here we can set a suitcase, which the player chooses, but for now so
-var greenIcon = L.icon({
+var bagIcon = L.icon({
     iconUrl: 'assets/travel-bag.png',
     iconSize: [40, 40],
 });
 
 const airportIcon = L.icon({
-    iconUrl: '/assets/airport7.png',
+    iconUrl: 'assets/airport7.png',
     iconSize: [40, 40],
 });
 
@@ -36,7 +36,7 @@ async function gameSetup(gameID, username) {
 
         showLoader();
 
-        const playerInfo = await getPlayerData(gameID);
+        const playerInfo = await getPlayerData(username);
         const airportsList = await getAirportList(gameID);
         const airportData = await getAirportData(playerInfo.current_location);
 
