@@ -1,16 +1,19 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Suitcase Adventure</title>
     <link rel="icon" href="assets/favicon.ico">
     <link rel="stylesheet" type="text/css" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
+        rel="stylesheet">
 
 </head>
+
 <body>
     <header>
         <div class="logo">
@@ -41,8 +44,11 @@
         </div>
     </header>
     <main>
-        <div id="map" style="height: 700px;width:40%"></div>
-        <table class="data-table">
+        <div id="loader-map">
+            <div id="map"></div>
+            <div id="loader"></div>
+        </div>
+        <!-- <table class="data-table">
             <thead>
             <tr>
                 <th>ICAO</th>
@@ -50,53 +56,67 @@
                 <th>City</th>
             </tr>
             </thead>
-            <tbody id="list">
-            <!-- Table rows will be dynamically added here -->
-            </tbody>
-        </table>
-        <div class="game-data">
-            <div id="player-data"></div>
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th colspan="2">You are now at:</th>
-                    </tr>
-                </thead>
-                <tbody id="current-location">
-                <!-- Table rows will be dynamically added here -->
-                </tbody>
-            </table>
-            <table style="width:100%;" class="data-table">
-                <thead>
-                    <tr>
-                        <th>Distance to the target:</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr id="distance" style="text-align: center; font-size: 28px"></tr>
-                </tbody>
-                <thead>
-                    <tr>
-                        <th>Consumed co2</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr id="co2" style="text-align: center; font-size: 28px"></tr>
-                </tbody>
-            </table>
+            <tbody id="list"> -->
+        <!-- Table rows will be dynamically added here -->
+        <!-- </tbody> -->
+        <!-- </table> -->
+        <div class="container">
+            <div class="game-data">
+                <!-- <div id="player-data"></div> -->
+
+                <table class="data-table">
+
+                    <thead>
+                        <tr>
+                            <th class="block-title" colspan="2">You are now at</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="current-location">
+                        <!-- Table rows will be dynamically added here -->
+                    </tbody>
+
+                </table>
+
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th class="block-title">Distance to the target</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr id="distance"></tr>
+                    </tbody>
+
+                    <thead>
+                        <tr>
+                            <th class="block-title">Consumed co2</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr id="co2"></tr>
+                    </tbody>
+
+                </table>
+
+                <table class="data-table">
+
+                    <thead>
+                        <tr>
+                            <th class="block-title">Information about the airport <a href="" id="wiki-link">🔗</a></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr id="wikipedia"></tr>
+                    </tbody>
+
+                </table>
+
+            </div>
         </div>
-        <!--<div class="game-data">
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th colspan="2">Information about the country:</th>
-                    </tr>
-                </thead>
-                <tbody id="current-country">
-                    Table rows will be dynamically added here
-                </tbody>
-            </table>
-        </div>-->
     </main>
     <dialog id="game-dialog"></dialog>
     <!-- Leaflet CSS -->
@@ -107,4 +127,5 @@
     <script src="script.js" defer></script>
     <script src="header.js" defer></script>
 </body>
+
 </html>

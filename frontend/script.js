@@ -8,8 +8,13 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 // in the future, here we can set a suitcase, which the player chooses, but for now so
-var greenIcon = L.icon({
+var bagIcon = L.icon({
     iconUrl: 'assets/travel-bag.png',
+    iconSize: [40, 40],
+});
+
+const airportIcon = L.icon({
+    iconUrl: 'assets/airport7.png',
     iconSize: [40, 40],
 });
 
@@ -18,6 +23,7 @@ var greenIcon = L.icon({
 //const testGameId = 4; // UPDATE LATER WHEN "NEW_GAME" FEATURE IS ADDED!
 const apiUrl = 'http://127.0.0.1:5000';
 const airportMarkers = L.featureGroup().addTo(map);
+let gifCount = 0;
 
 // --------------------- MAIN LOOP ------------------------------
 
@@ -28,11 +34,19 @@ async function gameSetup(gameID, username) {
 
     try {
 
-        const playerInfo = await getPlayerData(username);
-        updatePlayerInfoOnPage(playerInfo);
+        showLoader();
 
+        const playerInfo = await getPlayerData(username);
         const airportsList = await getAirportList(gameID);
-        updateAirportsListOnPage(airportsList);
+        const airportData = await getAirportData(playerInfo.current_location);
+
+        // updateAirportsListOnPage(airportsList);
+        updatePlayerInfoOnPage(playerInfo);
+        updateDynamicData(airportData);
+
+        hideLoader();
+
+        console.log(airportData);
 
         airportMarkers.clearLayers();
 
@@ -66,7 +80,7 @@ async function gameSetup(gameID, username) {
 
                 marker.bindPopup(popupContent);
 
-                marker.setIcon(greenIcon);
+                marker.setIcon(bagIcon);
             }
 
             else {
@@ -94,14 +108,16 @@ async function gameSetup(gameID, username) {
 
                 marker.bindPopup(popupContent);
 
+                marker.setIcon(airportIcon);
+
 
 
                 // very important - here we can later trace if the goal is reached
                 goButton.addEventListener('click', async function () {
 
                     const result = await updatePlayerLocation(gameID, airport.code);
-
                     console.log(result.win); // if true, we can ask a player for example if to start a new game by unhiding some DIV element or HTML 
+
 
 
                     await gameSetup(gameID,username);
@@ -148,6 +164,19 @@ async function updatePlayerLocation(gameId, icao) {
 
 }
 
+// returns JSON with data for search airport
+async function getAirportData(icao) {
+
+    const response = await fetch(`${apiUrl}/airport/data/${icao}`);
+    if (!response.ok) throw new Error('Invalid server input!');
+    const data = await response.json();
+
+    return data;
+
+}
+
+
+
 // --------------------- WEB PAGE UPDATE FUNCTIONS ------------------------------
 
 function updateAirportsListOnPage(data) {
@@ -167,14 +196,96 @@ function updateAirportsListOnPage(data) {
 function updatePlayerInfoOnPage(data) {
 
     document.getElementById("user-name").innerText = data.name;
-    document.getElementById("distance").innerHTML = `<td>${data.distance_to_target} km</td>`;
-    document.getElementById("co2").innerHTML = `<td>${data.co2_consumed} kg</td>`;
+    document.getElementById("distance").innerHTML = `<td>${data.distance_to_target.toLocaleString()} km</td>`;
+    document.getElementById("co2").innerHTML = `<td>${data.co2_consumed.toLocaleString()} kg</td>`;
 
     let table = document.getElementById("current-location");
+    table.innerHTML = '';
+
     let a_name = `<tr><td>Airport name:</td><td>${data.airport_name}</td></tr>`;
     let a_city = `<tr><td>City:</td><td>${data.airport_city}</td></tr>`;
-    let a_country = `<tr><td>Country:</td><td>${data.airport_country}</td></tr>`;
-    table.innerHTML = a_name + a_city + a_country;
+
+    let a_country = `
+    <tr>
+        <td>Country:</td>
+        <td id="country_name">${data.airport_country}</td>
+    </tr>`;
+
+    table.innerHTML += a_name + a_city + a_country;
+
+}
+
+function updateDynamicData(data) {
+
+    let countryNameElement = document.getElementById("country_name");
+    countryNameElement.innerHTML += `<img class="flag" src="${data.country.flag}" alt="flag">`
+
+    let table = document.getElementById("current-location");
+
+    let a_time = `
+    <tr>
+        <td>
+            Local Time:
+        </td>
+        <td>
+            ${data.time}
+        </td>
+    </tr>`;
+
+    let a_weather = `
+    <tr>
+        <td>
+            Weather:
+        </td>
+        <td>
+            <span>${data.weather.temp}°C</span>
+            <img src="${data.weather.icon}" alt="Weather Icon" title="${data.weather.description}">
+        </td>
+    </tr>`;
+
+    // const text = `"Baltimore/Washington International Thurgood Marshall Airport (IATA: BWI, ICAO: KBWI, FAA LID: BWI) is an international airport in Anne Arundel 
+    // County, Maryland, located 9 miles (14 km) south of downtown Baltimore and 30 miles (50 km) northeast of Washington, D. 
+    // C. BWI is one of three major airports, including Dulles International Airport (IAD) and Ronald Reagan Washington National Airport (DCA), 
+    // that serve the Washington–Baltimore metropolitan area. 
+    // Source: https://en.wikipedia.org/wiki/Baltimore/Washington_International_Airport"`
+
+    document.getElementById("wikipedia").innerHTML = `<td>${data.wiki.text}</td>`;
+    document.getElementById("wiki-link").href = data.wiki.source;
+
+    table.innerHTML += a_time + a_weather;
+
+}
+
+// --------------------- WEB PAGE UPDATE FUNCTIONS -- LOADER ------------------------------
+
+function showLoader() {
+
+    const mapElement = document.getElementById("map");
+    const loaderElement = document.getElementById("loader");
+    const gameData = document.querySelector(".game-data");
+
+    gifCount++;
+    if (gifCount > 4) {
+        gifCount = 1;
+    }
+
+    loaderElement.style.backgroundImage = `url('assets/fly${gifCount}.gif')`
+
+    mapElement.style.display = "none";
+    loaderElement.style.display = "block";
+    gameData.classList.add("loading");
+
+}
+
+function hideLoader() {
+
+    const mapElement = document.getElementById("map");
+    const loaderElement = document.getElementById("loader");
+    const gameData = document.querySelector(".game-data");
+
+    loaderElement.style.display = "none";
+    mapElement.style.display = "block";
+    gameData.classList.remove("loading");
 
 }
 
