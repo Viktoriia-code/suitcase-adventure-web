@@ -9,7 +9,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 // in the future, here we can set a suitcase, which the player chooses, but for now so
 var greenIcon = L.icon({
-    iconUrl: '/frontend/assets/travel-bag.png',
+    iconUrl: 'assets/travel-bag.png',
     iconSize: [40, 40],
 });
 
