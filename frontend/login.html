@@ -19,8 +19,14 @@
     </header>
     <main>
         <div class="login-wrapper">
-            <div class="title">
-                <h2>Sign In</h2>
+            <div class="title" id="login-title">
+                <h2>
+                    <input type="radio" name="login-select" class="login-select" id="select-login" checked>
+                    <label for="select-login">Log In</label>
+
+                    <input type="radio" name="login-select" class="login-select" id="select-register">
+                    <label for="select-register">Register</label>
+                </h2>
             </div>
             <form class="user-form" id="login-form">
                 <table>
@@ -38,13 +44,13 @@
                                 <label for="password">Password:</label>
                             </td>
                             <td>
-                                <input type="text" id="password" name="password" class="text-input">
+                                <input type="password" id="password" name="password" class="text-input">
                             </td>
                         </tr>
                     </tbody>
                 </table>
                 <span id="error"></span>
-                <input type="submit" value="Login" class="accent-btn">
+                <button type="submit" class="accent-btn" id="login-register-btn">Log In</button>
             </form>
         </div>
     </main>
