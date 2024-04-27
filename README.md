@@ -1,7 +1,9 @@
 # suitcase-adventure-web
 
-## :electric_plug: Modules:
-* pip install -r requirements.txt
+## :electric_plug: To install all project's modules:
+```
+pip install -r requirements.txt
+```
 
 ## :closed_lock_with_key: ENV file:
 Create at the main folder file with name ".env". Add your database password (DB_PASSWORD) and OpenWeatherMap API key (WEATHER_API_KEY) to the file.
