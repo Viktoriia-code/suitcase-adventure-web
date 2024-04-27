@@ -1,6 +1,11 @@
 # suitcase-adventure-web
 
-## :electric_plug: To install all project's modules:
+## :electric_plug: Install the required Python packages using pip:
+Navigate to the folder backend:
+```
+cd backend
+```
+and use the command:
 ```
 pip install -r requirements.txt
 ```
