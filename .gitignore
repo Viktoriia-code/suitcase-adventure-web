@@ -1,5 +1,5 @@
 .idea
-backend/.env
+.env
 backend/.venv
 backend/.idea
 backend/__pycache__

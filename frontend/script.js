@@ -46,9 +46,60 @@ async function gameSetup(gameID, username) {
 
         hideLoader();
 
-        console.log(airportData);
+        console.log(playerInfo);
 
         airportMarkers.clearLayers();
+
+        if (playerInfo.target_location === playerInfo.current_location) {
+            const dialog = document.getElementById("game-dialog");
+            // Clear any existing content to avoid duplication
+            dialog.innerHTML = ''; // Reset the dialog content
+            dialog.innerHTML += '<h2>Congratulations, you found the owner! 🎉</h2>';
+            dialog.innerHTML += '<h3>Game results:</h3>';
+            console.log(playerInfo);
+            dialog.innerHTML += `<p>✈️ Number of flights taken: ${playerInfo.flights_num}</p>`;
+            dialog.innerHTML += `<p>🌿 CO2 emissions caused by the player: ${playerInfo.co2_consumed} kg</p>`;
+
+            if (playerInfo.co2_consumed >= 1400) {
+                dialog.innerHTML += `<p>🚗 Your emitting is roughly equivalent to the weight of about ${Math.round(playerInfo.co2_consumed / 1400)} standard cars.</p>`;
+            } else {
+                dialog.innerHTML += `<p>🚲 Your emitting is roughly equivalent to the weight of about ${Math.round(playerInfo.co2_consumed / 15)} standard bicycles.</p>`;
+            }
+            dialog.innerHTML += '<h2>🌍 Choose your trips mindfully, for a greener tomorrow. 💚</h2>';
+
+            dialog.innerHTML += '<p>Would you like to start a new game or exit?</p>';
+
+            const btn_wrapper = document.createElement('div');
+            btn_wrapper.classList.add('btn_wrapper');
+
+            const exit_btn = document.createElement('button');
+            exit_btn.innerText = 'Exit';
+            btn_wrapper.appendChild(exit_btn);
+
+            const new_game_btn = document.createElement('button');
+            new_game_btn.innerText = 'New game';
+            btn_wrapper.appendChild(new_game_btn);
+            dialog.appendChild(btn_wrapper);
+
+            dialog.showModal();
+            // Event listener for "New game" button
+            new_game_btn.addEventListener("click", () => {
+                alert("Starting a new game");
+                // Logic to start a new game
+                dialog.close();
+            });
+
+            // Event listener for "Exit" button
+            exit_btn.addEventListener("click", () => {
+                dialog.close();
+                // Delete data from localStorage
+                localStorage.removeItem('userName');
+                localStorage.removeItem('userPassword');
+
+                // Redirect user to another page
+                window.location.href = 'login.html';
+            });
+        }
 
         // Plot markers on the map
         airportsList.forEach(airport => {
@@ -110,21 +161,14 @@ async function gameSetup(gameID, username) {
 
                 marker.setIcon(airportIcon);
 
-
-
                 // very important - here we can later trace if the goal is reached
                 goButton.addEventListener('click', async function () {
 
                     const result = await updatePlayerLocation(gameID, airport.code);
-                    console.log(result.win); // if true, we can ask a player for example if to start a new game by unhiding some DIV element or HTML 
-
-
 
                     await gameSetup(gameID,username);
-
                 });
             }
-
         });
 
     } catch (error) {
@@ -291,7 +335,7 @@ function hideLoader() {
 
 // --------------------- EXPERIMENTS (NOT USED YET) ------------------------------
 
-async function getCountryData(country_code) {
+/*async function getCountryData(country_code) {
     const response = await fetch(`https://restcountries.com/v3.1/alpha/${country_code}`);
     if (!response.ok) throw new Error('Invalid server input!');
     const data = await response.json();
@@ -301,7 +345,7 @@ async function getCountryData(country_code) {
     let c_population = `<tr><td>Population:</td><td>${data[0].population}</td></tr>`;
     let c_flag = `<tr><td>Flag:</td><td><img src="${data[0].flags.png}" style="width: 100px"></td></tr>`;
     table.innerHTML = c_area + c_population + c_flag;
-}
+}*/
 
 // ask the user if he wants to continue the prev game or start a new one
 function promptContinueOrNewGame() {
@@ -333,7 +377,6 @@ function promptContinueOrNewGame() {
 
     // Event listener for "Continue" button
     continue_btn.addEventListener("click", () => {
-        alert("Continue the previous game");
         // Logic to continue the previous game
         dialog.close();
     });
@@ -347,6 +390,7 @@ function check_user_login() {
         window.location.href = 'login.html';
     }
 }
+
 
 // --------------------- RUN CODE ------------------------------
 async function main() {
