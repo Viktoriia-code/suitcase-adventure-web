@@ -138,24 +138,4 @@ class Airport:
 
         return datetime_local.strftime('%H:%M') + " (UTC" + utc_offset_str + ")"
 
-    def get_country_info(self):
 
-        url = f"https://restcountries.com/v3.1/alpha/{self.country_code}"
-
-        answer = requests.get(url=url)
-        data = answer.json()
-
-        return {
-            "area": data[0]["area"],
-            "population": data[0]["population"],
-            "flag": data[0]["flags"]["png"]
-        }
-
-    def get_data(self):
-        return {
-            "name": self.name,
-            "weather": self.search_weather(),
-            "wiki": self.get_wikipedia_summary(),
-            "time": self.get_time(),
-            "country": self.get_country_info()
-        }
