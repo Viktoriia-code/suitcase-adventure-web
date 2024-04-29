@@ -75,7 +75,7 @@
     },
 
     "Brazil": {
-        "country_code": "in",
+        "country_code": "br",
         "name": "Christ the Redeemer",
         "img": "christ.png",
         "source": "https://en.wikipedia.org/wiki/Christ_the_Redeemer_(statue)"
