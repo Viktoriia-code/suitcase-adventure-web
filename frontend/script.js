@@ -226,21 +226,41 @@ function updatePlayerInfoOnPage(data) {
 }
 
 function addSoundsToButtons() {
-    const navButtons = document.getElementsByClassName("nav-btn");
-    const musicButton = document.getElementById("music");
+    const navButtons = document.getElementsByClassName("sound-btn");
+    const musicButtons = document.getElementsByClassName("music-btn");
+    const musicDiv = document.getElementById("music");
     const soundsButton = document.getElementById("sounds");
+    const volumeControl = document.getElementById("volume");
 
-    musicButton.addEventListener("click", (evt) => {
-        music = !music
-        if (music) {
-            musicButton.querySelector("p").innerHTML = "Music 🟢"
-            song.play();
+    for (let btn of musicButtons) {
+        btn.addEventListener("click", (evt) => {
+            music = !music
+            if (music) {
+                musicDiv.querySelector("p").innerHTML = "Music 🟢"
+                song.play();
+            }
+            else {
+                musicDiv.querySelector("p").innerHTML = "Music 🔴"
+                song.pause();
+            }
+        });
+    }
+
+    volumeControl.addEventListener("change", (evt) => {
+        music = true;
+        song.play();
+        song.volume = evt.target.value / 100;
+
+        if (evt.target.value == 0) {
+            musicDiv.querySelector("p").innerHTML = "Music 🔴";
         }
         else {
-            musicButton.querySelector("p").innerHTML = "Music 🔴"
-            song.pause();
+            musicDiv.querySelector("p").innerHTML = "Music 🟢";
         }
+
+
     });
+    
 
     soundsButton.addEventListener("click", (evt) => {
         sounds = !sounds
