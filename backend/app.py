@@ -135,7 +135,7 @@ def check_new_user(username):
 @app.route('/users/<username>')
 def fetch_player_data(username):
     new_user = check_new_user(username)
-    print(new_user)
+    # print(new_user)
 
     try:
         player_location = f"""
@@ -148,7 +148,7 @@ def fetch_player_data(username):
         """
         cursor.execute(player_location)
         player_data = cursor.fetchone()
-        print(player_data)
+        # print(player_data)
 
         game_id = player_data[0]
 

@@ -226,21 +226,27 @@ function updatePlayerInfoOnPage(data) {
 }
 
 function addSoundsToButtons() {
-    const navButtons = document.getElementsByClassName("nav-btn");
+    const navButtons = document.getElementsByClassName("sound-btn");
     const musicButton = document.getElementById("music");
     const soundsButton = document.getElementById("sounds");
 
-    musicButton.addEventListener("click", (evt) => {
-        music = !music
-        if (music) {
-            musicButton.querySelector("p").innerHTML = "Music 🟢"
-            song.play();
-        }
-        else {
-            musicButton.querySelector("p").innerHTML = "Music 🔴"
-            song.pause();
-        }
+    const volumeControl = document.getElementById("volume");
+
+    volumeControl.addEventListener("change", (evt) => {
+        song.volume = evt.target.value / 100;
     });
+
+    // musicButton.addEventListener("click", (evt) => {
+    //     music = !music
+    //     if (music) {
+    //         musicButton.querySelector("p").innerHTML = "Music 🟢"
+    //         song.play();
+    //     }
+    //     else {
+    //         musicButton.querySelector("p").innerHTML = "Music 🔴"
+    //         song.pause();
+    //     }
+    // });
 
     soundsButton.addEventListener("click", (evt) => {
         sounds = !sounds

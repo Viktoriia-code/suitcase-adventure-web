@@ -60,6 +60,21 @@ header {
 .nav-btn-img {
   width: 28px;
 }
+
+/* music slider */
+
+/* The slider itself */
+.slider {
+  width: 70px; /* Full-width */
+  transition: opacity .2s;
+}
+
+
+.slider::-moz-range-thumb {
+  background: #000089;
+  cursor: pointer;
+}
+
 main {
   display: flex;
   gap: 10px;

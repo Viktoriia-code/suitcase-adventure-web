@@ -1,7 +1,5 @@
 import requests
-from typing import Optional
-import wikipedia
-import re
+import json
 import csv
 
 from datetime import datetime
@@ -64,55 +62,12 @@ class Airport:
             "temp": data["main"]["temp"]
         }
 
-    def get_wikipedia_summary(self) -> Optional[dict]:
-        """
-        Searches the given airport name from Wikipedia and returns a short summary of the airport.
-        If the airport article is not found or getting data from Wikipedia fails, the function returns None.
-        :param airport_name:
-        :return:
-        """
+    def get_wikipedia_summary(self):
+        f = open('airports_wikipedia.json')
+        data = json.load(f)
 
-        # Generate the Wikipedia search query
-        if len(self.name) == 40:
-            airport_name_words = self.name.split(" ")
-            if len(airport_name_words) > 1:
-                airport_name_words.pop(-1)
-            search_query = " ".join(airport_name_words)
-        else:
-            search_query = self.name
+        return data[self.ident]
 
-        # Search the search query from Wikipedia and get the summary and url of the article
-        # Return None if getting data from Wikipedia failed
-        try:
-            wikipedia_article = wikipedia.page(search_query)
-            summary = re.sub(" +", " ",
-                             re.sub("\\.([a-zA-Z])", ". \\1", wikipedia_article.summary.replace("\n", " ")))
-            url = wikipedia_article.url
-        except wikipedia.exceptions.WikipediaException:
-            # just in case if Wiki doesn't work, but we want to return smth
-            return {
-                "text": f"Find more data about {self.name} from <a id='airport-guide-link' href='https://airportguide.com/airport/info/{self.iata_code}'>Airport Guide</a>",
-                "source": f"https://airportguide.com/airport/info/{self.iata_code}"
-            }
-
-        # Get the first 3 sentences of the summary
-        sentences = summary.split(". ")
-        first_sentences = ". ".join(sentences[:min(len(sentences), 3)])
-        if not first_sentences.endswith("."):
-            first_sentences += "."
-
-        # Construct the summary text from the list of words with new line every 20 words
-        summary_words = first_sentences.split(" ")
-        summary_with_line_breaks = ""
-        for i in range(len(summary_words)):
-            if (i + 1) % 20 == 0:
-                summary_with_line_breaks += "\n"
-            summary_with_line_breaks += f"{summary_words[i]} "
-
-        return {
-            "text": summary_with_line_breaks,
-            "source": url
-        }
 
     def get_time(self):
 
