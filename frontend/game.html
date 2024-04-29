@@ -22,22 +22,27 @@
         </div>
         <div class="nav">
             <div id="music" class="nav-btn">
-                <img src="assets/music.png" alt="Music" class="nav-btn-img">
-                Music
+                <img src="assets/music.png" alt="Music" class="nav-btn-img music-btn sound-btn">
+                <p class="music-btn sound-btn">Music 🟢</p>
+                <input type="range" class="slider" id="volume">
             </div>
-            <div id="stats" class="nav-btn" onclick="openStats()">
+            <div id="sounds" class="nav-btn sound-btn">
+                <img src="assets/sound.png" alt="Sound" class="nav-btn-img">
+                <p>Sounds 🟢</p>
+            </div>
+            <div id="stats" class="nav-btn sound-btn" onclick="openStats()">
                 <img src="assets/analytics.png" alt="Stats" class="nav-btn-img">
                 Stats
             </div>
-            <div id="rules" class="nav-btn">
+            <div id="rules" class="nav-btn sound-btn">
                 <img src="assets/rules.png" alt="Rules" class="nav-btn-img">
                 Rules
             </div>
-            <div id="signout" class="nav-btn" onclick="userLoginOut()">
+            <div id="signout" class="nav-btn sound-btn" onclick="userLoginOut()">
                 <img src="assets/logout.png" alt="Sign Out" class="nav-btn-img">
                 Exit
             </div>
-            <div class="nav-btn">
+            <div class="nav-btn sound-btn">
                 <img src="assets/user.png" alt="Profile photo" class="nav-btn-img">
                 <span id="user-name"></span>
             </div>
@@ -115,6 +120,10 @@
 
                 </table>
 
+            </div>
+            <div class="loading-game-data">
+                <!-- <p>Loading</p> -->
+                <img id="loading-gif" src="assets/loading.gif">
             </div>
         </div>
     </main>

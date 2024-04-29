@@ -11,6 +11,7 @@ from flask import jsonify
 from geopy.distance import distance
 
 from airport import Airport
+import time
 
 load_dotenv()
 
@@ -135,7 +136,7 @@ def check_new_user(username):
 @app.route('/users/<username>')
 def fetch_player_data(username):
     new_user = check_new_user(username)
-    #print(new_user)
+    # print(new_user)
     try:
         player_location = f"""
             SELECT game.*, airport.name, airport.municipality, country.name, player.name
@@ -147,7 +148,7 @@ def fetch_player_data(username):
         """
         cursor.execute(player_location)
         player_data = cursor.fetchone()
-        #print(player_data)
+        # print(player_data)
 
         game_id = player_data[0]
 
@@ -239,7 +240,21 @@ def flyto(game_id, icao):
 @app.route('/airport/data/<icao>')
 def get_airport_data(icao):
     airport = Airport(ident=icao)
-    return jsonify(airport.get_data())
+
+    weather = airport.search_weather()
+    wiki = airport.get_wikipedia_summary()
+    local_time = airport.get_time()
+
+    answer = {
+            "name": airport.name,
+            "weather": weather,
+            "wiki": wiki,
+            "time": local_time,
+            "country_code": airport.country_code.lower()
+        }
+
+    return jsonify(answer)
+
 
 
 @app.route('/users/<username>/<password>')

@@ -9,12 +9,12 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 // in the future, here we can set a suitcase, which the player chooses, but for now so
 var bagIcon = L.icon({
-    iconUrl: 'assets/travel-bag.png',
+    iconUrl: 'assets/markers/travel-bag.png',
     iconSize: [40, 40],
 });
 
 const airportIcon = L.icon({
-    iconUrl: 'assets/airport7.png',
+    iconUrl: 'assets/markers/airport7.png',
     iconSize: [40, 40],
 });
 
@@ -23,6 +23,29 @@ const airportIcon = L.icon({
 const apiUrl = 'http://127.0.0.1:5000';
 const airportMarkers = L.featureGroup().addTo(map);
 let gifCount = 0;
+
+// -------- music & sounds global settings ------------
+
+let music = true;
+let sounds = true;
+
+const song = new Audio('assets/music/music3.mp3');
+song.volume = 1;
+music && song.play();
+
+// let musicOpenGame = true;
+// ['click','ontouchstart', 'mouseover'].forEach(evt => 
+//     document.addEventListener(evt, () => {
+//         musicOpenGame && song.play();
+//         musicOpenGame = false;
+//     })
+// );
+
+// endless song loop
+song.addEventListener('ended', () => {
+    song.currentTime = 0;
+    song.play();
+});
 
 // --------------------- MAIN LOOP ------------------------------
 
@@ -37,7 +60,6 @@ async function gameSetup(gameID, username) {
         const airportsList = await getAirportList(gameID);
         const airportData = await getAirportData(playerInfo.current_location);
 
-        // updateAirportsListOnPage(airportsList);
         updatePlayerInfoOnPage(playerInfo);
         updateDynamicData(airportData);
 
@@ -78,7 +100,6 @@ async function gameSetup(gameID, username) {
                 popupContent.append(pCountry);
 
                 marker.bindPopup(popupContent);
-
                 marker.setIcon(bagIcon);
             } else {
                 const popupContent = document.createElement('div');
@@ -107,10 +128,16 @@ async function gameSetup(gameID, username) {
 
                 // very important - here we can later trace if the goal is reached
                 goButton.addEventListener('click', async function () {
+                    // sound for 2-3 sec fly
+                    let flySound = new Audio('assets/sounds/fly3.wav');
+                    flySound.volume = 0.5;
+                    flySound.currentTime = 1.3;
+                    sounds && flySound.play();
 
-                    const result = await updatePlayerLocation(gameID, airport.code);
+                    const result = await updatePlayerLocation(gameID, airport.code); // returns True if the same locations, or False if not
+                    // console.log(result.win); 
 
-                    await gameSetup(gameID,username);
+                    await gameSetup(gameID, username);
                 });
             }
         });
@@ -162,21 +189,6 @@ async function getAirportData(icao) {
 }
 
 // --------------------- WEB PAGE UPDATE FUNCTIONS ------------------------------
-
-function updateAirportsListOnPage(data) {
-
-    let table = document.getElementById("list");
-    table.innerHTML = '';
-
-    for (let airport = 0; airport < data.length; airport++) {
-        let airport_data = document.createElement("tr");
-        airport_data.innerHTML = `<td>${data[airport].code}</td><td>${data[airport].country}</td><td>${data[airport].city}</td>`;
-        table.appendChild(airport_data);
-    }
-
-}
-
-
 function updatePlayerInfoOnPage(data) {
 
     document.getElementById("user-name").innerText = data.name;
@@ -199,10 +211,69 @@ function updatePlayerInfoOnPage(data) {
 
 }
 
+function addSoundsToButtons() {
+    const navButtons = document.getElementsByClassName("sound-btn");
+    const musicButtons = document.getElementsByClassName("music-btn");
+    const musicDiv = document.getElementById("music");
+    const soundsButton = document.getElementById("sounds");
+    const volumeControl = document.getElementById("volume");
+
+    for (let btn of musicButtons) {
+        btn.addEventListener("click", (evt) => {
+            music = !music
+            if (music) {
+                musicDiv.querySelector("p").innerHTML = "Music 🟢"
+                song.play();
+            }
+            else {
+                musicDiv.querySelector("p").innerHTML = "Music 🔴"
+                song.pause();
+            }
+        });
+    }
+
+    volumeControl.addEventListener("change", (evt) => {
+        music = true;
+        song.play();
+        song.volume = evt.target.value / 100;
+
+        if (evt.target.value == 0) {
+            musicDiv.querySelector("p").innerHTML = "Music 🔴";
+        }
+        else {
+            musicDiv.querySelector("p").innerHTML = "Music 🟢";
+        }
+
+
+    });
+    
+
+    soundsButton.addEventListener("click", (evt) => {
+        sounds = !sounds
+        if (sounds) {
+            soundsButton.querySelector("p").innerHTML = "Sounds 🟢"
+        }
+        else {
+            soundsButton.querySelector("p").innerHTML = "Sounds 🔴"
+        }
+    });
+
+    for (let btn of navButtons) {
+        btn.addEventListener("click", (evt) => {
+            let clickSound = new Audio('assets/sounds/click.wav');
+            clickSound.volume = 0.3;
+
+            sounds && clickSound.play(); 
+
+        });
+    }
+
+}
+
 function updateDynamicData(data) {
 
     let countryNameElement = document.getElementById("country_name");
-    countryNameElement.innerHTML += `<img class="flag" src="${data.country.flag}" alt="flag">`
+    countryNameElement.innerHTML += `<img class="flag" src="assets/flags/${data.country_code}.png" alt="flag">`
 
     let table = document.getElementById("current-location");
 
@@ -247,17 +318,20 @@ function showLoader() {
     const mapElement = document.getElementById("map");
     const loaderElement = document.getElementById("loader");
     const gameData = document.querySelector(".game-data");
+    const gameDataLoad = document.querySelector(".loading-game-data");
 
     gifCount++;
     if (gifCount > 4) {
         gifCount = 1;
     }
 
-    loaderElement.style.backgroundImage = `url('assets/fly${gifCount}.gif')`
+    loaderElement.style.backgroundImage = `url('assets/fly/fly${gifCount}.gif')`
 
     mapElement.style.display = "none";
     loaderElement.style.display = "block";
-    gameData.classList.add("loading");
+
+    gameData.style.display="none"
+    gameDataLoad.style.display="block"
 
 }
 
@@ -266,10 +340,13 @@ function hideLoader() {
     const mapElement = document.getElementById("map");
     const loaderElement = document.getElementById("loader");
     const gameData = document.querySelector(".game-data");
+    const gameDataLoad = document.querySelector(".loading-game-data");
 
     loaderElement.style.display = "none";
     mapElement.style.display = "block";
-    gameData.classList.remove("loading");
+
+    gameData.style.display="block"
+    gameDataLoad.style.display="none"
 
 }
 
@@ -374,6 +451,8 @@ async function main() {
     if (player_data.new_user === false && player_data.game_completed === 0) {
         promptContinueOrNewGame();
     }
+
+    addSoundsToButtons();
     let gameId = player_data.game_id;
     await gameSetup(gameId, username);
 }
