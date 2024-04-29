@@ -11,6 +11,7 @@ from flask import jsonify
 from geopy.distance import distance
 
 from airport import Airport
+from player import Player
 import time
 
 load_dotenv()
@@ -254,6 +255,38 @@ def get_airport_data(icao):
         }
 
     return jsonify(answer)
+
+
+@app.route('/stamps')
+def all_possible_stamps():
+    f = open('stamps_summary.json')
+    data = json.load(f)
+    return data
+
+
+@app.route('/stamps/<player_name>')
+def user_stamps(player_name):
+    player = Player(player_name)
+    answer = {
+        "stamps": player.stamps
+    }
+    return jsonify(answer)
+
+
+@app.route('/stamps/<player_name>/<stamp>')
+def add_stamp(player_name, stamp):
+    player = Player(player_name)
+    if stamp in player.stamps:
+        answer = {
+            "already_collected": True,
+        }
+        return jsonify(answer)
+    else:
+        player.add_stamp(stamp)
+        answer = {
+            "already_collected": False,
+        }
+        return jsonify(answer)
 
 
 @app.route('/users/<username>/<password>')

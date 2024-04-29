@@ -38,6 +38,10 @@
                 <img src="assets/rules.png" alt="Rules" class="nav-btn-img">
                 Rules
             </div>
+            <div id="stamps" class="nav-btn sound-btn" onclick="openStamps()">
+                <img src="assets/stamp.png" alt="Rules" class="nav-btn-img">
+                My Stamps
+            </div>
             <div id="signout" class="nav-btn sound-btn" onclick="userLoginOut()">
                 <img src="assets/logout.png" alt="Sign Out" class="nav-btn-img">
                 Exit
@@ -128,6 +132,29 @@
         </div>
     </main>
     <dialog id="game-dialog"></dialog>
+
+
+    <dialog id="new-stamp-modal">
+        <p>Wow! You found a new country stamp!</p>
+        <img id="new-stamp-img">
+        <h2 id="new-stamp-description"></h2>
+        <div>
+            <button id="new-stamp-btn" class="sound-btn" type="button">Continue!</button>
+        </div>
+    </dialog>
+
+    <dialog id="show-stamps">
+        <h2>My Stamps</h2>
+
+        <div class="stamps-collection">
+        </div>
+
+        <div>
+            <button id="show-stamps-btn" class="sound-btn" type="button">Close</button>
+        </div>
+    </dialog>
+
+
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <!-- Leaflet JavaScript -->

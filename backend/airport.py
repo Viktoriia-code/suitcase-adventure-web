@@ -29,7 +29,6 @@ class Airport:
                 mycursor = config.conn.cursor()
                 mycursor.execute(sql)
                 myresult = mycursor.fetchall()
-                print(myresult)
                 if len(myresult) == 1:
                     self.name = myresult[0][1]
                     self.latitude = float(myresult[0][2])
@@ -67,7 +66,6 @@ class Airport:
         data = json.load(f)
 
         return data[self.ident]
-
 
     def get_time(self):
 
