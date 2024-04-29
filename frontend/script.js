@@ -326,12 +326,6 @@ function updateDynamicData(data) {
         </td>
     </tr>`;
 
-    // const text = `"Baltimore/Washington International Thurgood Marshall Airport (IATA: BWI, ICAO: KBWI, FAA LID: BWI) is an international airport in Anne Arundel 
-    // County, Maryland, located 9 miles (14 km) south of downtown Baltimore and 30 miles (50 km) northeast of Washington, D. 
-    // C. BWI is one of three major airports, including Dulles International Airport (IAD) and Ronald Reagan Washington National Airport (DCA), 
-    // that serve the Washington–Baltimore metropolitan area. 
-    // Source: https://en.wikipedia.org/wiki/Baltimore/Washington_International_Airport"`
-
     document.getElementById("wikipedia").innerHTML = `<td>${data.wiki.text}</td>`;
     document.getElementById("wiki-link").href = data.wiki.source;
 
@@ -471,9 +465,9 @@ async function main() {
     check_user_login();
     const username = JSON.parse(localStorage.getItem('userName'));
     let player_data = await getPlayerData(username);
-    // if (player_data.new_user === false && player_data.game_completed === 0) {
-    //     promptContinueOrNewGame();
-    // }
+    if (player_data.new_user === false && player_data.game_completed === 0) {
+        promptContinueOrNewGame();
+    }
 
     addSoundsToButtons();
     let gameId = player_data.game_id;

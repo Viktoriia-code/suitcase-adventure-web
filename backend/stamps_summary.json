@@ -72,6 +72,13 @@
         "name": "Taj Mahal",
         "img": "taj-mahal.png",
         "source": "https://en.wikipedia.org/wiki/Taj_Mahal"
+    },
+
+    "Brazil": {
+        "country_code": "in",
+        "name": "Christ the Redeemer",
+        "img": "christ.png",
+        "source": "https://en.wikipedia.org/wiki/Christ_the_Redeemer_(statue)"
     }
 
 }
