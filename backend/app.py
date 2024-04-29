@@ -241,27 +241,9 @@ def flyto(game_id, icao):
 def get_airport_data(icao):
     airport = Airport(ident=icao)
 
-    weather = 0
-    wiki = 0
-    local_time = 0
-
-    # ------------- Open Weather ----------------
-    start_time = time.time()
     weather = airport.search_weather()
-    weather_time = time.time() - start_time
-    print(f"Search weather time: {weather_time:.2f} seconds")
-
-    # ------------- Wikipedia ----------------
-    start_time = time.time()
     wiki = airport.get_wikipedia_summary()
-    wiki_time = time.time() - start_time
-    print(f"Get wikipedia summary time: {wiki_time:.2f} seconds")
-
-    # ------------- Local Time ----------------
-    start_time = time.time()
     local_time = airport.get_time()
-    time_time = time.time() - start_time
-    print(f"Get local_time time: {time_time:.2f} seconds")
 
     answer = {
             "name": airport.name,
