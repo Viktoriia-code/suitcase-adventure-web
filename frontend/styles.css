@@ -8,7 +8,11 @@ body {
   font-weight: 400;
   font-style: normal;
   font-size: 18px;
-  background-color: #f2efe9; 
+  /* background-color: #aad3df; */
+  /* background-color: #0685f8; */
+  /* background-color: #000089; */
+  background-color: #f2efe9;
+  /* background-color: #000089; */
 }
 .login-body {
   background: linear-gradient(90deg, hsla(212, 100%, 88%, 1) 1%, hsla(0, 0%, 100%, 1) 51%, hsla(55, 100%, 65%, 1) 100%);
@@ -24,6 +28,8 @@ h2 {
 }
 header {
   background: linear-gradient(90deg, hsla(212, 100%, 88%, 1) 1%, hsla(0, 0%, 100%, 1) 51%, hsla(55, 100%, 65%, 1) 100%);
+  /* background: #0685f8;
+  color: white; */
   padding: 10px;
   margin-bottom: 2rem;
   display: flex;
@@ -87,10 +93,22 @@ main {
   background-position: center;
 }
 
-.loading {
-  opacity: 0.2;
-  pointer-events: none;
+.loading-game-data {
+  display: none;
+  color: white;
+  font-weight: bold;
+  font-size: 1.2rem;
+  text-align: center;
+  margin: auto;
+  width: 100%;
+  padding-top: 25%;
 }
+
+#loading-gif {
+  width: 50%;
+}
+
+
 
 .container {
   margin-left: 4rem;
