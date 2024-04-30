@@ -22,10 +22,10 @@ cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 connection = mysql.connector.connect(
-         host='127.0.0.1',
-         port=3306,
-         database='suitcase_game',
-         user='root',
+         host=os.getenv('DB_HOST'),
+         port=os.getenv('DB_PORT'),
+         database=os.getenv('DB_NAME'),
+         user=os.getenv('DB_USER'),
          password=os.getenv('DB_PASSWORD'),
          autocommit=True
         )
