@@ -40,7 +40,7 @@ cursor = connection.cursor()
 
 def fetch_random_large() -> list:
     """
-    returns the list of airports, 5 from each continents ICAO-codes
+    returns the list of airports, 5 from each continent ICAO-codes
     """
     continents = ["AF", "AS", "EU", "NA", "OC", "SA"]
 
@@ -62,7 +62,7 @@ def fetch_random_large() -> list:
                 myresult = mycursor.fetchall()
 
                 larges_from_continent = [i[0] for i in myresult]
-                random.shuffle(larges_from_continent) # to random
+                random.shuffle(larges_from_continent)  # to random
                 available_airports.extend(larges_from_continent[:from_each_continent])
 
         random.shuffle(available_airports)
@@ -191,6 +191,8 @@ def check_password(username: str, password: str) -> bool:
 
 @app.route('/users/<username>')
 def fetch_player_data(username):
+    new_user = check_new_user(username)
+    # print(new_user)
     try:
         player_location = f"""
             SELECT game.*, airport.name, airport.municipality, country.name, player.name
@@ -304,6 +306,7 @@ def get_airport_data(icao):
         }
 
     return jsonify(answer)
+
 
 
 @app.route('/users/<username>/<password>')

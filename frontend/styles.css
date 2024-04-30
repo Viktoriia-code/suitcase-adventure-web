@@ -348,6 +348,10 @@ dialog {
   margin-top: 30px;
 }
 
-dialog p {
+dialog h2 {
+  margin-bottom: 20px;
+}
+
+dialog p, dialog h3 {
   margin-bottom: 10px;
 }
