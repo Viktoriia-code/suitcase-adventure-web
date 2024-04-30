@@ -190,22 +190,36 @@ def check_password(username: str, password: str) -> bool:
     return result is not None
 
 
-@app.route('/users/<username>')
-def fetch_player_data(username):
+@app.route('/gameid/<username>')
+def fetch_player_game(username):
+    cursor = connection.cursor()
+    cursor.execute('SELECT id FROM game WHERE player_id IN (SELECT id FROM player WHERE name = %s) AND completed = 0', (username,))
+    result = cursor.fetchone()
+
+    response = {
+        "exists": result is not None
+    }
+    if result is not None:
+        response["game_id"] = result[0]
+
+    return response
+
+
+@app.route('/gamedata/<game_id>')
+def fetch_game_data(game_id):
     try:
-        player_location = f"""
-            SELECT game.*, airport.name, airport.municipality, country.name, player.name
+        player_location = """
+            SELECT game.*, airport.name, airport.municipality, country.name
             FROM game 
             LEFT JOIN airport ON game.current_location = airport.ident
             LEFT JOIN country ON airport.iso_country = country.iso_country
-            LEFT JOIN player ON game.player_id = player.id
-            WHERE player.name = '{username}' AND game.completed = 0
+            WHERE game.id = %s
         """
-        cursor.execute(player_location)
+        cursor.execute(player_location, (game_id,))
         player_data = cursor.fetchone()
 
         if player_data is None:
-            return {"new_user": True}
+            return {"exists": False}
 
         player_data_json = {
             "game_id": player_data[0],
@@ -219,8 +233,7 @@ def fetch_player_data(username):
             "airport_name": player_data[8],
             "airport_city": player_data[9],
             "airport_country": player_data[10],
-            "name": player_data[11],
-            "new_user": False,
+            "exists": True,
         }
         return player_data_json
     except Exception as e:

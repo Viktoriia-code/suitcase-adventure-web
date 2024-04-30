@@ -44,27 +44,27 @@ song.addEventListener('ended', () => {
 // main loop, based on buttons on the map
 // after each click (other words - after choosing the airport where to fly), the entire page is updated to make it easier to track the moment when the player reaches the goal 
 
-async function gameSetup(gameID, username) {
+async function gameSetup(gameID, username, password) {
     try {
         showLoader();
 
-        const playerInfo = await getPlayerData(username);
+        const gameInfo = await getGameData(gameID);
         const airportsList = await getAirportList(gameID);
-        const airportData = await getAirportData(playerInfo.current_location);
+        const airportData = await getAirportData(gameInfo.current_location);
 
-        updatePlayerInfoOnPage(playerInfo);
+        updatePlayerInfoOnPage(gameInfo);
         updateDynamicData(airportData);
 
         hideLoader();
 
         // stamps check
-        playerStampsUpdateAndShow(playerInfo.airport_country);
+        playerStampsUpdateAndShow(gameInfo.airport_country);
       
         airportMarkers.clearLayers();
 
         // win case
-        if (playerInfo.target_location === playerInfo.current_location) {
-            user_wins(playerInfo);
+        if (gameInfo.target_location === gameInfo.current_location) {
+            user_wins(gameInfo, username, password);
         }
 
         // Plot markers on the map
@@ -72,7 +72,7 @@ async function gameSetup(gameID, username) {
             var marker = L.marker([airport.lat, airport.long]).addTo(map);
             airportMarkers.addLayer(marker);
 
-            if (airport.code === playerInfo.current_location) {
+            if (airport.code === gameInfo.current_location) {
 
                 const popupContent = document.createElement('div');
 
@@ -130,9 +130,8 @@ async function gameSetup(gameID, username) {
                     sounds && flySound.play();
 
                     const result = await updatePlayerLocation(gameID, airport.code); // returns True if the same locations, or False if not
-                    // console.log(result.win); 
 
-                    await gameSetup(gameID, username);
+                    await gameSetup(gameID, username, password);
                 });
             }
         });
@@ -143,66 +142,49 @@ async function gameSetup(gameID, username) {
 
 // --------------------- API GET FUNCTIONS ------------------------------
 
-// returns all data from "available_airport" table in SQL
-async function getAirportList(gameId) {
-    const response = await fetch(`${apiUrl}/airports/${gameId}`);
+// Sends request to the given URL and parses the response as JSON.
+async function getJsonData(url) {
+    const response = await fetch(url);
     if (!response.ok) throw new Error('Invalid server input!');
     const data = await response.json();
 
     return data;
 }
 
-// returns data about the player
-async function getPlayerData(username) {
-    const response = await fetch(`${apiUrl}/users/${username}`);
-    if (!response.ok) throw new Error('Invalid server input!');
-    const data = await response.json();
+// returns all data from "available_airport" table in SQL
+async function getAirportList(gameId) {
+    return await getJsonData(`${apiUrl}/airports/${gameId}`);
+}
 
-    return data;
+// returns data about the current game id of the player
+async function getPlayerGame(username) {
+    return await getJsonData(`${apiUrl}/gameid/${username}`);
+}
+
+// returns data about the game
+async function getGameData(gameId) {
+    return await getJsonData(`${apiUrl}/gamedata/${gameId}`);
 }
 
 // returns "true" if players wins or "false" if not
 async function updatePlayerLocation(gameId, icao) {
-
-    const response = await fetch(`${apiUrl}/flyto/${gameId}/${icao}`);
-    if (!response.ok) throw new Error('Invalid server input!');
-    const data = await response.json();
-
-    return data;
-
+    return await getJsonData(`${apiUrl}/flyto/${gameId}/${icao}`);
 }
 
 // returns JSON with data for search airport
 async function getAirportData(icao) {
-
-    const response = await fetch(`${apiUrl}/airport/data/${icao}`);
-    if (!response.ok) throw new Error('Invalid server input!');
-    const data = await response.json();
-
-    return data;
-
+    return await getJsonData(`${apiUrl}/airport/data/${icao}`);
 }
 
 
 async function getAllStamps() {
-
-    const response = await fetch(`${apiUrl}/stamps`);
-    if (!response.ok) throw new Error('Invalid server input!');
-    const data = await response.json();
-    return data;
-
+    return await getJsonData(`${apiUrl}/stamps`);
 }
 
 
 // returns json with true or false
 async function checkPlayerStamps(playerName, stampName) {
-
-    const response = await fetch(`${apiUrl}/stamps/${playerName}/${stampName}`);
-    if (!response.ok) throw new Error('Invalid server input!');
-    const data = await response.json();
-
-    return data;
-
+    return await getJsonData(`${apiUrl}/stamps/${playerName}/${stampName}`)
 }
 
 // --------------------- WEB PAGE UPDATE FUNCTIONS ------------------------------
@@ -420,14 +402,14 @@ function promptContinueOrNewGame(previousGameId, username, password) {
             return;
         }
 
-        await gameSetup(gameId, username)
+        await gameSetup(gameId, username, password)
 
         dialog.close();
     });
 
     // Event listener for "Continue" button
     continue_btn.addEventListener("click", () => {
-        gameSetup(previousGameId, username)
+        gameSetup(previousGameId, username, password)
 
         dialog.close();
     });
@@ -469,7 +451,7 @@ function check_user_login() {
     }
 }
 
-function user_wins(playerInfo) {
+function user_wins(playerInfo, username, password) {
     const dialog = document.getElementById("game-dialog");
     dialog.innerHTML = ''; // Reset the dialog content
     dialog.innerHTML += '<h2>Congratulations, you found the owner! 🎉</h2>';
@@ -500,9 +482,16 @@ function user_wins(playerInfo) {
 
     dialog.showModal();
     // Event listener for "New game" button
-    new_game_btn.addEventListener("click", () => {
+    new_game_btn.addEventListener("click", async () => {
         alert("Starting a new game");
-        // Logic to start a new game
+
+        const gameId = await createGame(username, password);
+        if (gameId === null) {
+            return;
+        }
+
+        await gameSetup(gameId, username, password)
+
         dialog.close();
     });
 
@@ -527,20 +516,20 @@ async function main() {
     const username = JSON.parse(localStorage.getItem('userName'));
     const password = JSON.parse(localStorage.getItem('userPassword'));
 
-    let player_data = await getPlayerData(username);
+    let gameData = await getPlayerGame(username);
 
-    if (player_data.new_user) {
+    if (!gameData.exists) {
         const gameId = await createGame(username, password);
         if (gameId === null) {
             return;
         }
 
-        await gameSetup(gameId, username);
+        await gameSetup(gameId, username, password);
 
         return;
     }
   
-    promptContinueOrNewGame(player_data.game_id, username, password);
+    promptContinueOrNewGame(gameData.game_id, username, password);
 }
 
 main();
