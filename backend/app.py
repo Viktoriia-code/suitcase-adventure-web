@@ -109,28 +109,82 @@ def distance_calcs(icao1: str, icao2: str) -> float:
     return distance(coordinates[0], coordinates[1]).km
 
 
-def check_new_user(username):
-    try:
-        players_game = f"""
-        SELECT game.player_id FROM game
-        LEFT JOIN player ON game.player_id = player.id
-        WHERE player.name = '{username}'
+@app.route('/creategame/<username>/<password>')
+def create_game(username, password):
+    """
+    Creates a new game for the user. If the user has previous uncompleted game, the game is deleted.
+    :param username:
+    :param password:
+    :return:
+    """
+
+    # Check if username and password are correct
+    if not check_password(username, password):
+        return "Wrong username or password.", 401
+
+    # Delete the previous uncompleted game (or games) of the user if it exists
+    cursor = connection.cursor()
+    cursor.execute("DELETE FROM available_airport WHERE game_id IN (SELECT id FROM game WHERE player_id IN (SELECT id FROM player WHERE name = %s) AND completed = 0)", (username,))
+    cursor.execute("DELETE FROM game WHERE player_id IN (SELECT id FROM player WHERE name = %s) AND completed = 0", (username,))
+    cursor.reset()
+
+    # Create id for the new game
+    cursor.execute("SELECT MAX(id) FROM game")
+    max_id_result = cursor.fetchone()
+    max_id = max_id_result[0] if max_id_result[0] is not None else 0
+    game_id = max_id + 1
+
+    # Get list of the airports
+    airports = fetch_random_large()
+
+    # Get random current and target locations
+    current_location = random.choice(airports)
+    target_location = random.choice(airports)
+    while current_location == target_location:
+        target_location = random.choice(airports)
+
+    distance_to_target = distance_calcs(current_location, target_location)
+    flights_num = 0  # set flights_num as 0 at the beginning
+    emissions = 0  # set emissions as 0 at the beginning
+
+    # Create the new game
+    insert_query = """
+    INSERT INTO game (id, player_id, current_location, target_location, co2_consumed, flights_num, distance_to_target) 
+    VALUES (%s, (SELECT id FROM player WHERE name = %s), %s, %s, %s, %s, %s)
+    """
+    cursor.execute(insert_query, (game_id, username, current_location, target_location, emissions, flights_num, distance_to_target))
+
+    # new 30 rows in available_airport table for new game (game_id)
+    for icao in airports:
+        insert_query = """
+        INSERT INTO available_airport (game_id, airport_ident) 
+        VALUES (%s, %s)
         """
-        cursor.execute(players_game)
-        players_game_data = cursor.fetchall()
-        if len(players_game_data) == 0:
-            #here we can create the game for just registered users
-            return True
-        else:
-            return False
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+
+        cursor.execute(insert_query, (game_id, icao))
+
+    cursor.close()
+
+    return {"game": game_id}
+
+
+def check_password(username: str, password: str) -> bool:
+    """
+    Checks if a user with the given username and password exists.
+    :param username:
+    :param password:
+    :return:
+    """
+
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM player WHERE name = %s AND password = %s", (username, password))
+    result = cursor.fetchone()
+
+    return result is not None
+
 
 @app.route('/users/<username>')
 def fetch_player_data(username):
-    new_user = check_new_user(username)
-    print(new_user)
-
     try:
         player_location = f"""
             SELECT game.*, airport.name, airport.municipality, country.name, player.name
@@ -138,20 +192,16 @@ def fetch_player_data(username):
             LEFT JOIN airport ON game.current_location = airport.ident
             LEFT JOIN country ON airport.iso_country = country.iso_country
             LEFT JOIN player ON game.player_id = player.id
-            WHERE player.name = '{username}'
+            WHERE player.name = '{username}' AND game.completed = 0
         """
         cursor.execute(player_location)
         player_data = cursor.fetchone()
-        print(player_data)
 
-        game_id = player_data[0]
-
-        if player_data[7] == 1:
-            #create a new game here and give its id to variable game_id
-            pass
+        if player_data is None:
+            return {"new_user": True}
 
         player_data_json = {
-            "game_id": game_id,
+            "game_id": player_data[0],
             "player_id": player_data[1],
             "current_location": player_data[2],
             "target_location": player_data[3],
@@ -163,7 +213,7 @@ def fetch_player_data(username):
             "airport_city": player_data[9],
             "airport_country": player_data[10],
             "name": player_data[11],
-            "new_user": new_user,
+            "new_user": False,
         }
         return player_data_json
     except Exception as e:
@@ -236,6 +286,7 @@ def login_user(username, password):
     sql = "SELECT * FROM player WHERE name=%s AND password=%s"
     val = (username, password)
 
+    cursor.reset()
     cursor.execute(sql, val)
     result = cursor.fetchone()
 
