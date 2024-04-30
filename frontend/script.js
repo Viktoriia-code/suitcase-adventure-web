@@ -379,7 +379,7 @@ async function getCountryData(country_code) {
 }
 
 // ask the user if he wants to continue the prev game or start a new one
-function promptContinueOrNewGame() {
+function promptContinueOrNewGame(previousGameId, username, password) {
     const dialog = document.getElementById("game-dialog");
 
     // Clear any existing content to avoid duplication
@@ -400,18 +400,54 @@ function promptContinueOrNewGame() {
 
     dialog.showModal();
     // Event listener for "New game" button
-    new_game_btn.addEventListener("click", () => {
+    new_game_btn.addEventListener("click", async () => {
         alert("Starting a new game");
-        // Logic to start a new game
+
+        const gameId = await createGame(username, password);
+        if (gameId === null) {
+            return;
+        }
+
+        await gameSetup(gameId, username)
+
         dialog.close();
     });
 
     // Event listener for "Continue" button
     continue_btn.addEventListener("click", () => {
         alert("Continue the previous game");
-        // Logic to continue the previous game
+
+        gameSetup(previousGameId, username)
+
         dialog.close();
     });
+
+    dialog.addEventListener('cancel', (event) => {
+        event.preventDefault();
+    });
+}
+
+async function createGame(username, password) {
+    try {
+        const response = await fetch(`${apiUrl}/creategame/${username}/${password}`);
+        if (!response.ok) {
+            const responseText = await response.text();
+
+            alert('Server error:\n' + responseText)
+            console.error('Server error: ' + responseText);
+
+            return null;
+        }
+
+        const json = await response.json();
+        return json.game;
+
+    } catch (error) {
+        alert('Server connection failed: ' + error.message)
+        console.error('Server connection failed: ' + error.message);
+    }
+
+    return null;
 }
 
 function check_user_login() {
@@ -426,15 +462,26 @@ function check_user_login() {
 // --------------------- RUN CODE ------------------------------
 async function main() {
     check_user_login();
-    const username = JSON.parse(localStorage.getItem('userName'));
-    let player_data = await getPlayerData(username);
-    if (player_data.new_user === false && player_data.game_completed === 0) {
-        promptContinueOrNewGame();
-    }
-
+  
     addSoundsToButtons();
-    let gameId = player_data.game_id;
-    await gameSetup(gameId, username);
+
+    const username = JSON.parse(localStorage.getItem('userName'));
+    const password = JSON.parse(localStorage.getItem('userPassword'));
+
+    let player_data = await getPlayerData(username);
+
+    if (player_data.new_user) {
+        const gameId = await createGame(username, password);
+        if (gameId === null) {
+            return;
+        }
+
+        await gameSetup(gameId, username);
+
+        return;
+    }
+  
+    promptContinueOrNewGame(player_data.game_id, username, password);
 }
 
 main();
