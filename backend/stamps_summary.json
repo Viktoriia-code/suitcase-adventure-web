@@ -1,0 +1,84 @@
+{
+    "United States": {
+        "country_code": "us",
+        "name": "Statue Of Liberty",
+        "img": "statue-of-liberty.png",
+        "source": "https://en.wikipedia.org/wiki/Statue_of_Liberty"
+    },
+    "United Kingdom": {
+        "country_code": "gb",
+        "name": "Big Ben",
+        "img": "big-ben.png",
+        "source": "https://en.wikipedia.org/wiki/Big_Ben"
+    },
+
+    "United Arab Emirates": {
+        "country_code": "ae",
+        "name": "Burj Khalifa",
+        "img": "burj-khalifa.png",
+        "source": "https://en.wikipedia.org/wiki/Burj_Khalifa"
+    },
+
+    "Russia": {
+        "country_code": "ru",
+        "name": "Saint Basil's Cathedral",
+        "img": "cathedral-of-saint-basil.png",
+        "source": "https://en.wikipedia.org/wiki/Saint_Basil%27s_Cathedral"
+    },
+
+    "Italy": {
+        "country_code": "it",
+        "name": "Colosseum",
+        "img": "colosseum.png",
+        "source": "https://en.wikipedia.org/wiki/Colosseum"
+    },
+    "China": {
+        "country_code": "cn",
+        "name": "Great Wall of China",
+        "img": "great-wall-of-china.png",
+        "source": "https://en.wikipedia.org/wiki/Great_Wall_of_Chinat"
+    },
+
+    "Finland": {
+        "country_code": "fi",
+        "name": "Helsinki Cathedral",
+        "img": "helsinki-senate-square.png",
+        "source": "https://en.wikipedia.org/wiki/Helsinki_Cathedral"
+    },
+
+    "Canada": {
+        "country_code": "ca",
+        "name": "Niagara Falls",
+        "img": "niagara.png",
+        "source": "https://en.wikipedia.org/wiki/Niagara_Falls"
+    },
+
+    "France": {
+        "country_code": "fr",
+        "name": "Eiffel Tower",
+        "img": "paris.png",
+        "source": "https://en.wikipedia.org/wiki/Eiffel_Tower"
+    },
+
+    "Australia": {
+        "country_code": "au",
+        "name": "Sydney Opera House",
+        "img": "sydney.png",
+        "source": "https://en.wikipedia.org/wiki/Sydney_Opera_House"
+    },
+
+    "India": {
+        "country_code": "in",
+        "name": "Taj Mahal",
+        "img": "taj-mahal.png",
+        "source": "https://en.wikipedia.org/wiki/Taj_Mahal"
+    },
+
+    "Brazil": {
+        "country_code": "br",
+        "name": "Christ the Redeemer",
+        "img": "christ.png",
+        "source": "https://en.wikipedia.org/wiki/Christ_the_Redeemer_(statue)"
+    }
+
+}

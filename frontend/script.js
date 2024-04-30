@@ -33,14 +33,6 @@ const song = new Audio('assets/music/music3.mp3');
 song.volume = 1;
 music && song.play();
 
-// let musicOpenGame = true;
-// ['click','ontouchstart', 'mouseover'].forEach(evt => 
-//     document.addEventListener(evt, () => {
-//         musicOpenGame && song.play();
-//         musicOpenGame = false;
-//     })
-// );
-
 // endless song loop
 song.addEventListener('ended', () => {
     song.currentTime = 0;
@@ -65,6 +57,9 @@ async function gameSetup(gameID, username) {
 
         hideLoader();
 
+        // stamps check
+        playerStampsUpdateAndShow(playerInfo.airport_country);
+      
         airportMarkers.clearLayers();
 
         // win case
@@ -188,6 +183,28 @@ async function getAirportData(icao) {
 
 }
 
+
+async function getAllStamps() {
+
+    const response = await fetch(`${apiUrl}/stamps`);
+    if (!response.ok) throw new Error('Invalid server input!');
+    const data = await response.json();
+    return data;
+
+}
+
+
+// returns json with true or false
+async function checkPlayerStamps(playerName, stampName) {
+
+    const response = await fetch(`${apiUrl}/stamps/${playerName}/${stampName}`);
+    if (!response.ok) throw new Error('Invalid server input!');
+    const data = await response.json();
+
+    return data;
+
+}
+
 // --------------------- WEB PAGE UPDATE FUNCTIONS ------------------------------
 function updatePlayerInfoOnPage(data) {
 
@@ -212,7 +229,7 @@ function updatePlayerInfoOnPage(data) {
 }
 
 function addSoundsToButtons() {
-    const navButtons = document.getElementsByClassName("sound-btn");
+    const soundButtons = document.getElementsByClassName("sound-btn");
     const musicButtons = document.getElementsByClassName("music-btn");
     const musicDiv = document.getElementById("music");
     const soundsButton = document.getElementById("sounds");
@@ -258,7 +275,7 @@ function addSoundsToButtons() {
         }
     });
 
-    for (let btn of navButtons) {
+    for (let btn of soundButtons) {
         btn.addEventListener("click", (evt) => {
             let clickSound = new Audio('assets/sounds/click.wav');
             clickSound.volume = 0.3;
@@ -298,17 +315,40 @@ function updateDynamicData(data) {
         </td>
     </tr>`;
 
-    // const text = `"Baltimore/Washington International Thurgood Marshall Airport (IATA: BWI, ICAO: KBWI, FAA LID: BWI) is an international airport in Anne Arundel 
-    // County, Maryland, located 9 miles (14 km) south of downtown Baltimore and 30 miles (50 km) northeast of Washington, D. 
-    // C. BWI is one of three major airports, including Dulles International Airport (IAD) and Ronald Reagan Washington National Airport (DCA), 
-    // that serve the Washington–Baltimore metropolitan area. 
-    // Source: https://en.wikipedia.org/wiki/Baltimore/Washington_International_Airport"`
-
     document.getElementById("wikipedia").innerHTML = `<td>${data.wiki.text}</td>`;
     document.getElementById("wiki-link").href = data.wiki.source;
 
     table.innerHTML += a_time + a_weather;
 
+}
+
+function promptNewStamp(stamp) {
+    const dialog = document.getElementById("new-stamp-modal");
+    const newStampImg = document.getElementById("new-stamp-img");
+    const newStampBtn = document.getElementById("new-stamp-btn");
+    const newStampDesc = document.getElementById("new-stamp-description");
+
+    newStampImg.src = `assets/stamps/${stamp.img}`;
+    newStampDesc.innerHTML = `${stamp.name} <a style="text-decoration:none" href="${stamp.source}">🔗</a>`;   
+
+    dialog.showModal();
+
+    newStampBtn.addEventListener("click", () => {
+        dialog.close();
+    });
+}
+
+async function playerStampsUpdateAndShow(countryName) {
+    const stamps = await getAllStamps();
+    const current_country = countryName;
+    const player_name = localStorage.getItem('userName');
+
+    if (stamps[current_country]) {
+        const stampResponse = await checkPlayerStamps(player_name, countryName);
+        if (!stampResponse.already_collected) {
+            promptNewStamp(stamps[current_country]);
+        }
+    }
 }
 
 // --------------------- WEB PAGE UPDATE FUNCTIONS -- LOADER ------------------------------
