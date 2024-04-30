@@ -235,6 +235,10 @@ function promptContinueOrNewGame(previousGameId, username, password) {
 
         dialog.close();
     });
+
+    dialog.addEventListener('cancel', (event) => {
+        event.preventDefault();
+    });
 }
 
 async function createGame(username, password) {
