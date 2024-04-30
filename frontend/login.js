@@ -3,6 +3,11 @@
 async function loginClick(event) {
     event.preventDefault(); // Prevent the default form submission behavior
 
+    // sounds
+    let clickSound = new Audio('assets/sounds/click.wav');
+    clickSound.volume = 0.3;
+    clickSound.play(); 
+
     // Get username and password from the form inputs
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
@@ -51,12 +56,17 @@ async function userLogin(name, password, register) {
         document.getElementById('error').innerText = 'Error while connecting to backend.';
     }
 
+
     return false;
 }
 
 function updateSubmitBtn() {
     document.getElementById('error').innerText = '';
     document.getElementById('login-register-btn').innerText = document.getElementById('select-login').checked ? 'Log In' : 'Register';
+    // sounds
+    let clickSound = new Audio('assets/sounds/click.wav');
+    clickSound.volume = 0.3;
+    clickSound.play(); 
 }
 
 const loginSelectButtons = document.querySelectorAll('.login-select');
