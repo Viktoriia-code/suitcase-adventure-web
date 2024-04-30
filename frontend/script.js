@@ -413,7 +413,6 @@ function promptContinueOrNewGame(previousGameId, username, password) {
     dialog.showModal();
     // Event listener for "New game" button
     new_game_btn.addEventListener("click", async () => {
-        alert("Starting a new game");
 
         const gameId = await createGame(username, password);
         if (gameId === null) {
