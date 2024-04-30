@@ -57,7 +57,7 @@ class Airport:
         return {
             "main": data["weather"][0]["main"],
             "description": data["weather"][0]["description"],
-            "icon": f"https://openweathermap.org/img/wn/{data["weather"][0]["icon"]}@2x.png",
+            "icon": f"https://openweathermap.org/img/wn/{data['weather'][0]['icon']}@2x.png",
             "temp": data["main"]["temp"]
         }
 
