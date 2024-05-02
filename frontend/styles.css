@@ -89,9 +89,9 @@ main {
 }
 
 #map {
-  height: 700px;
+  height: calc(100vh - 125px);
   width: 100%;
-  border-radius: 5%;
+  border-radius: 2%;
   /* filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%); */
 }
 
@@ -330,7 +330,6 @@ h5 {
   border: 5px solid rgba(255, 255, 255, 0.5); */
 } 
 
-
 dialog {
   position: absolute;
   margin: 70px auto;
@@ -339,10 +338,22 @@ dialog {
   color: white;
   padding: 40px;
   text-align: center;
+  border-radius: 2%;
 }
 
 dialog button {
   cursor: pointer;
+  background-color: #c0dcfd;
+  color: black;
+  border: 1px #000089 solid;
+  font-size: 18px;
+  padding: 10px 50px;
+  font-weight: 600;
+  transition: all ease-in-out .3s;
+}
+
+dialog button:hover {
+  background-color: #fff278;
 }
 
 .btn_wrapper {
@@ -409,4 +420,19 @@ margin-top: 15px;
 
 #collected-stamp-img {
   width: 50%;
+}
+
+#game-dialog {
+  max-width: 600px;
+}
+
+.stat-data {
+  text-align: center;
+  font-size: 28px;
+  background-color: #0070e9;
+  padding: 7px 7px 7px 4px;
+}
+
+dialog::backdrop {
+    background: rgba(0, 0, 0, 0.2);
 }
