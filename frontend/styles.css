@@ -200,7 +200,6 @@ main {
   max-width: 100px;
   overflow: auto;
   text-overflow: clip;
-  white-space: wrap;
 }
 
 #wiki-link {
@@ -214,11 +213,10 @@ main {
   text-decoration: none;
 }
 
-
-
+/* LOGIN PAGE */
 .login-wrapper {
   margin: 10% auto;
-  box-shadow: rgba(149, 157, 165, 0.9) 0px 8px 24px;
+  box-shadow: rgba(149, 157, 165, 0.9) 0 8px 24px;
   border-radius: 5px;
 }
 
@@ -324,8 +322,7 @@ h5 {
 
 .green-icon {
   /* background-color: #27ba35; */
-  background-image: url("/assets/travel-bag.png")
-
+  background-image: url("./assets/markers/travel-bag.png")
   /* border-radius: 50%;
   border: 5px solid rgba(255, 255, 255, 0.5); */
 } 
