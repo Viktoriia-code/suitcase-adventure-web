@@ -24,28 +24,41 @@ async function openStamps() {
 
     const myStamps = await getPlayerStamps(playerName);
 
+    const myStampsLength = myStamps["stamps"].length;
+    const allStampsLength = Object.keys(stampsInfo).length;
+
+    const collectionTitle = document.getElementById("stamps-collection-title");
+    collectionTitle.innerHTML = `My Stamps (${myStampsLength}/${allStampsLength})`
+
     stampsContainer.innerHTML = '';
 
-    for (let stampName of myStamps["stamps"]) {
-        const stamp = stampsInfo[stampName];
+    if (myStampsLength !== 0) {
+        for (let stampName of myStamps["stamps"]) {
+            const stamp = stampsInfo[stampName];
+    
+            const stampDiv = document.createElement("div");
+            stampDiv.classList.add("stamp-info");
+    
+            stampDiv.innerHTML = `
+            <div style="position: relative;">
+                <img src="assets/flags/${stamp.country_code}.png" style="width: 40px; position: absolute; top: 0; right: 0;">
+            </div>
+            <img src="assets/stamps/${stamp.img}" id="collected-stamp-img">
+            <p id="collected-stamp-description">${stamp.name} <a style="text-decoration:none" href="${stamp.source}">🔗</a></p>        
+            `
+    
+            stampsContainer.appendChild(stampDiv);
+    
+        } 
+    }
+    
+    else {
 
-        const stampDiv = document.createElement("div");
-        stampDiv.classList.add("stamp-info");
-
-        console.log(stamp);
-
-        stampDiv.innerHTML = `
-        <div style="position: relative;">
-            <img src="assets/flags/${stamp.country_code}.png" style="width: 40px; position: absolute; top: 0; right: 0;">
-        </div>
-        <img src="assets/stamps/${stamp.img}" id="collected-stamp-img">
-        <p id="collected-stamp-description">${stamp.name} <a style="text-decoration:none" href="${stamp.source}">🔗</a></p>        
-        `
-        console.log(stampDiv);
+        const stampDiv = document.createElement("div");  
+        stampDiv.innerHTML = '<h3>Travel and collect World Landmark Stamps into your unique collection! 😃<h3>';
 
         stampsContainer.appendChild(stampDiv);
-
-    } 
+    }
     
     dialog.showModal();
 

@@ -364,6 +364,20 @@ dialog p, dialog h3 {
   width: 50%;
 }
 
+.stamp-background {
+  background-color: #0685f8;
+  width: 80%;
+  margin: auto;
+  margin-top: 15px;
+  box-sizing: border-box;
+  /* cursor: pointer; */
+  border: 1px #ccc solid;
+  padding: 0.5rem;
+  border-radius: 6px;
+  box-shadow: 3px 6px 6px #ccc;
+  transition: all 0.2s ease-in-out;
+}
+
 #new-stamp-btn {
   margin-top: 30px;
 }
