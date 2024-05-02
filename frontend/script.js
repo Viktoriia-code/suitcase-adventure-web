@@ -7,10 +7,9 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 }).addTo(map);
 
-// in the future, here we can set a suitcase, which the player chooses, but for now so
-var bagIcon = L.icon({
+const bagIcon = L.icon({
     iconUrl: 'assets/markers/travel-bag.png',
-    iconSize: [40, 40],
+    iconSize: [35, 35],
 });
 
 const airportIcon = L.icon({
@@ -30,7 +29,7 @@ let music = true;
 let sounds = true;
 
 const song = new Audio('assets/music/music3.mp3');
-song.volume = 1;
+song.volume = 0.5;
 music && song.play();
 
 // endless song loop
@@ -73,6 +72,8 @@ async function gameSetup(gameID, username, password) {
             airportMarkers.addLayer(marker);
 
             if (airport.code === gameInfo.current_location) {
+
+                map.setView([airport.lat, airport.long], 2);
 
                 const popupContent = document.createElement('div');
 

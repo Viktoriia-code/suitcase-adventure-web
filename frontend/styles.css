@@ -8,11 +8,9 @@ body {
   font-weight: 400;
   font-style: normal;
   font-size: 18px;
-  /* background-color: #aad3df; */
-  /* background-color: #0685f8; */
-  /* background-color: #000089; */
   background-color: #f2efe9;
-  /* background-color: #000089; */
+  box-sizing: border-box;
+  padding-bottom: 5rem;
 }
 .login-body {
   background: linear-gradient(90deg, hsla(212, 100%, 88%, 1) 1%, hsla(0, 0%, 100%, 1) 51%, hsla(55, 100%, 65%, 1) 100%);
@@ -48,6 +46,8 @@ header {
 .nav {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-around;
   gap: 25px;
   padding: 0 5%;
 }
@@ -76,17 +76,18 @@ header {
 
 main {
   display: flex;
-  gap: 10px;
-  width: 90%;
+  justify-content: space-around;
+  width: 95%;
   margin: auto;
-
+  flex-wrap: wrap;
+  /* align-items: center; */
 }
 
 #loader-map {
-  height: 700px;
-  width: 60%;
+  width: 55%;
   border-radius: 5%;
 }
+
 
 #map {
   height: 700px;
@@ -122,15 +123,14 @@ main {
   width: 50%;
 }
 
-
-
 .container {
   margin-left: 4rem;
-  width: 40%;
+  width: 33%;
   background-color: #000089;
   border-radius: 2%;
   padding: 1%
 }
+
 
 .game-data {
   width: 100%;
@@ -306,6 +306,7 @@ h5 {
 }
 
 .fly-button {
+  font-size: 0.9rem;
   background-color: #0685f8;
   border: none;
   border-radius: 5px;
@@ -319,17 +320,6 @@ h5 {
   background-color: #000089;
   cursor:pointer;
 }
-
-/* Leaflet icons */
-
-.green-icon {
-  /* background-color: #27ba35; */
-  background-image: url("/assets/travel-bag.png")
-
-  /* border-radius: 50%;
-  border: 5px solid rgba(255, 255, 255, 0.5); */
-} 
-
 
 dialog {
   position: absolute;
@@ -380,7 +370,7 @@ margin-top: 15px;
   margin-top: 3%;
   margin-bottom: 5%;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   flex-wrap: wrap;
   gap: 2rem;
 }
@@ -409,4 +399,52 @@ margin-top: 15px;
 
 #collected-stamp-img {
   width: 50%;
+}
+
+@media only screen and (max-width: 1200px) {
+    .stamp-info {
+      width: calc(100% / 3 - 2rem);
+    }
+
+    #new-stamp-modal {
+      width: 65%;
+      margin: auto;
+    }
+}
+
+
+@media only screen and (max-width: 769px) {
+
+  header {
+    padding-top: 2rem;
+    justify-content: space-around;
+    flex-wrap: wrap;
+  }
+
+  main {
+    width: 90%;
+  }
+
+  .nav {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  #loader-map {
+    width: 100%;
+    padding-bottom: 1rem;
+  }
+  .container {
+    width: 100%;
+    margin-left: 0rem;
+  }
+  dialog {
+    width: 80%;
+    min-width: 0px;
+  }
+
+  .stamp-info {
+    width: 90%;
+    margin: auto;
+  }
 }
