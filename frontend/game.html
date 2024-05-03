@@ -11,16 +11,24 @@
     <link rel="stylesheet" type="text/css" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </head>
 
 <body>
+    
     <header>
+
         <div class="logo">
             <div class="logo-img">✈️</div>
             <h1>Suitcase<br>Adventure</h1>
         </div>
-        <div class="nav">
+
+        <a href="javascript:void(0);" class="toggle-icon" onclick="toggleFunction()">
+            <i class="fa fa-bars"></i>
+        </a>
+
+        <div id="toggleButtons" class="nav">
             <div id="music" class="nav-btn">
                 <img src="assets/music.png" alt="Music" class="nav-btn-img music-btn sound-btn">
                 <p class="music-btn sound-btn">Music 🟢</p>
@@ -51,27 +59,16 @@
                 <span id="user-name"></span>
             </div>
         </div>
+
     </header>
+
     <main>
         <div id="loader-map">
             <div id="map"></div>
             <div id="loader"></div>
         </div>
-        <!-- <table class="data-table">
-            <thead>
-            <tr>
-                <th>ICAO</th>
-                <th>Country</th>
-                <th>City</th>
-            </tr>
-            </thead>
-            <tbody id="list"> -->
-        <!-- Table rows will be dynamically added here -->
-        <!-- </tbody> -->
-        <!-- </table> -->
         <div class="container">
             <div class="game-data">
-                <!-- <div id="player-data"></div> -->
 
                 <table class="data-table">
 
@@ -133,7 +130,7 @@
     </main>
 
     <footer>
-        
+
     </footer>
 
 

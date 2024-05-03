@@ -54,6 +54,11 @@ async function openStamps() {
     });
 }
 
+function toggleFunction() {
+    var x = document.getElementById("toggleButtons");
+    x.classList.toggle("toggled");
+}
+
 
 // --------------------- API GET FUNCTIONS ------------------------------
 async function getAllStamps() {

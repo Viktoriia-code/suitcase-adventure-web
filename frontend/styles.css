@@ -26,8 +26,6 @@ h2 {
 }
 header {
   background: linear-gradient(90deg, hsla(212, 100%, 88%, 1) 1%, hsla(0, 0%, 100%, 1) 51%, hsla(55, 100%, 65%, 1) 100%);
-  /* background: #0685f8;
-  color: white; */
   padding: 10px;
   margin-bottom: 2rem;
   display: flex;
@@ -61,6 +59,15 @@ header {
   width: 28px;
 }
 
+.toggle-icon {
+  color: #0070e9;
+  font-size: 32px;
+  display: none;
+  position: absolute;
+  right: 5%;
+  top: 1rem;
+}
+
 
 /* The slider itself */
 .slider {
@@ -80,7 +87,6 @@ main {
   width: 95%;
   margin: auto;
   flex-wrap: wrap;
-  /* align-items: center; */
 }
 
 #loader-map {
@@ -93,7 +99,6 @@ main {
   height: 700px;
   width: 100%;
   border-radius: 5%;
-  /* filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%); */
 }
 
 
@@ -103,7 +108,6 @@ main {
   height: 700px;
   width: 100%;
   border-radius: 5%;
-  /* background-image: url(assets/fly4.gif); */
   background-size: cover;
   background-position: center;
 }
@@ -196,7 +200,6 @@ main {
 }
 
 #wikipedia td {
-  /* text-wrap: wrap; */
   max-width: 100px;
   overflow: auto;
   text-overflow: clip;
@@ -379,7 +382,6 @@ margin-top: 15px;
   background-color: #0685f8;
   width: calc(100% / 5 - 2rem);
   box-sizing: border-box;
-  /* cursor: pointer; */
   border: 1px #ccc solid;
   padding: 1rem;
   border-radius: 6px;
@@ -389,7 +391,6 @@ margin-top: 15px;
 
 .stamp-info:hover {
   transform: scale(1.02);
-  /* box-shadow: 0px 0px 2px #ccc; */
 }
 
 #collected-stamp-description {
@@ -416,7 +417,7 @@ margin-top: 15px;
 @media only screen and (max-width: 769px) {
 
   header {
-    padding-top: 2rem;
+    padding-top: 1rem;
     justify-content: space-around;
     flex-wrap: wrap;
   }
@@ -426,8 +427,21 @@ margin-top: 15px;
   }
 
   .nav {
+    display: none;
+    width: 100%;
+    background: hsla(0, 0%, 100%, 0.6);
+    padding: 1rem;
+    border-radius: 5px;
     margin-top: 1.5rem;
     margin-bottom: 1.5rem;
+  }
+
+  .toggled {
+    display: flex;
+  }
+
+  .toggle-icon {
+    display: block;
   }
 
   #loader-map {

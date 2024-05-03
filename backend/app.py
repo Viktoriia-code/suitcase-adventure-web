@@ -1,18 +1,19 @@
-import json
 import os
-import config
-
-import mysql.connector
 from dotenv import load_dotenv
+
+import json
+import mysql.connector
+
 from flask import Flask, request
 from flask_cors import CORS
-import random
 from flask import jsonify
+
+import random
 from geopy.distance import distance
 
+import config
 from airport import Airport
 from player import Player
-import time
 
 load_dotenv()
 
