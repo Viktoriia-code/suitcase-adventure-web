@@ -17,10 +17,17 @@ async function openStats() {
     dialog.innerHTML = ''; // Reset the dialog content
     dialog.innerHTML += '<h2>📊 Statistics for all completed games</h2>';
 
+    const nZeroFormat = new Intl.NumberFormat(undefined, { maximumFractionDigits: 0 });
+    const nOneFormat = new Intl.NumberFormat(undefined, { maximumFractionDigits: 1 });
+    
+    const co2 = nZeroFormat.format(stats_data[0][0]);
+    const flights = nOneFormat.format(stats_data[0][1]);
+    const gamesCompleted = stats_data[0][2];
+
     dialog.innerHTML +=
-                `<h3>Average co2 consumption</h3><p class="stat-data">${stats_data[0][0]} kg</p>` +
-                `<h3>Average flight amount</h3><p class="stat-data">${stats_data[0][1]}</p>` +
-                `<h3>Number of completed games</h3><p class="stat-data">${stats_data[0][2]}</p>`;
+        `<h3>Average co2 consumption</h3><p class="stat-data">${co2} kg</p>` +
+        `<h3>Average flight amount</h3><p class="stat-data">${flights}</p>` +
+        `<h3>Number of completed games</h3><p class="stat-data">${gamesCompleted}</p>`;
     let closeBtn = document.createElement('button');
     closeBtn.innerText = 'Close';
     closeBtn.classList.add('sound-btn');
@@ -43,7 +50,7 @@ function openRules() {
     dialog.innerHTML += '<h2>Game Rules</h2>';
 
     dialog.innerHTML += `<p> Game aim: You're a lost suitcase. Your task is to find your owner in one of the largest airports in the world in a minimum number of flights. Choose the airport carefully – the fewer flights, the less emissions into the atmosphere!</p>` +
-            `<br><br>
+        `<br><br>
             Game play: To select an airport, follow the prompts of the game. The distance to the owner will tell
             you which continent, country, or airport is better to choose. To save your progress and go to the
             main menu, enter "menu" at any time when choosing a direction.
@@ -92,10 +99,10 @@ async function openStamps() {
     if (myStampsLength !== 0) {
         for (let stampName of myStamps["stamps"]) {
             const stamp = stampsInfo[stampName];
-    
+
             const stampDiv = document.createElement("div");
             stampDiv.classList.add("stamp-info");
-    
+
             stampDiv.innerHTML = `
             <div style="position: relative;">
                 <img src="assets/flags/${stamp.country_code}.png" style="width: 40px; position: absolute; top: 0; right: 0;">
@@ -103,20 +110,20 @@ async function openStamps() {
             <img src="assets/stamps/${stamp.img}" id="collected-stamp-img">
             <p id="collected-stamp-description">${stamp.name} <a style="text-decoration:none" href="${stamp.source}">🔗</a></p>        
             `
-    
+
             stampsContainer.appendChild(stampDiv);
-    
-        } 
+
+        }
     }
-    
+
     else {
 
-        const stampDiv = document.createElement("div");  
+        const stampDiv = document.createElement("div");
         stampDiv.innerHTML = '<h3>Travel and collect World Landmark Stamps into your unique collection! 😃<h3>';
 
         stampsContainer.appendChild(stampDiv);
     }
-    
+
     dialog.showModal();
 
     closeButton.addEventListener("click", () => {
