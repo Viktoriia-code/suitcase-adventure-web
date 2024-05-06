@@ -191,7 +191,6 @@ async function checkPlayerStamps(playerName, stampName) {
 // --------------------- WEB PAGE UPDATE FUNCTIONS ------------------------------
 function updatePlayerInfoOnPage(data) {
 
-    document.getElementById("user-name").innerText = data.name;
     document.getElementById("distance").innerHTML = `<td>${data.distance_to_target.toLocaleString()} km</td>`;
     document.getElementById("co2").innerHTML = `<td>${data.co2_consumed.toLocaleString()} kg</td>`;
 
@@ -293,7 +292,7 @@ function updateDynamicData(data) {
             Weather:
         </td>
         <td>
-            <span>${data.weather.temp}°C</span>
+            <span>${data.weather.temp.toFixed()}°C</span>
             <img src="${data.weather.icon}" alt="Weather Icon" title="${data.weather.description}">
         </td>
     </tr>`;
@@ -454,7 +453,7 @@ function check_user_login() {
 function user_wins(playerInfo, username, password) {
     const dialog = document.getElementById("game-dialog");
     dialog.innerHTML = ''; // Reset the dialog content
-    dialog.innerHTML += '<h2>Congratulations, you found the owner! 🎉</h2>';
+    dialog.innerHTML += `<h2>Congratulations, you found the owner! 🎉</h2>`;
     dialog.innerHTML += '<h3>Game results:</h3>';
     dialog.innerHTML += `<p>✈️ Number of flights taken: ${playerInfo.flights_num}</p>`;
     dialog.innerHTML += `<p>🌿 CO2 emissions caused by the player: ${playerInfo.co2_consumed} kg</p>`;
@@ -483,7 +482,6 @@ function user_wins(playerInfo, username, password) {
     dialog.showModal();
     // Event listener for "New game" button
     new_game_btn.addEventListener("click", async () => {
-        alert("Starting a new game");
 
         const gameId = await createGame(username, password);
         if (gameId === null) {
@@ -510,11 +508,13 @@ function user_wins(playerInfo, username, password) {
 // --------------------- RUN CODE ------------------------------
 async function main() {
     check_user_login();
-  
-    addSoundsToButtons();
 
     const username = JSON.parse(localStorage.getItem('userName'));
     const password = JSON.parse(localStorage.getItem('userPassword'));
+
+    document.getElementById("user-name").innerText = username;
+
+    addSoundsToButtons();
 
     let gameData = await getPlayerGame(username);
 

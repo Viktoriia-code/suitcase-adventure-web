@@ -270,6 +270,18 @@ def fetch_game_airports(game_id):
         return str(e)
 
 
+@app.route('/statistics')
+def fetch_statistics():
+    try:
+        cursor = connection.cursor()
+        cursor.execute("SELECT AVG(co2_consumed), AVG(flights_num), COUNT(*) FROM game WHERE completed = 1")
+        statistics_data = cursor.fetchall()
+
+        return statistics_data
+    except Exception as e:
+        return str(e)
+
+
 @app.route('/flyto/<game_id>/<icao>')
 def flyto(game_id, icao):
     cursor = connection.cursor()

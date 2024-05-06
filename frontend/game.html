@@ -42,7 +42,7 @@
                 <img src="assets/analytics.png" alt="Stats" class="nav-btn-img">
                 Stats
             </div>
-            <div id="rules" class="nav-btn sound-btn">
+            <div id="rules" class="nav-btn sound-btn" onclick="openRules()">
                 <img src="assets/rules.png" alt="Rules" class="nav-btn-img">
                 Rules
             </div>
@@ -136,18 +136,19 @@
 
     <dialog id="game-dialog"></dialog>
 
-
     <dialog id="new-stamp-modal">
-        <p>Wow! You found a new country stamp!</p>
-        <img id="new-stamp-img">
-        <h2 id="new-stamp-description"></h2>
+        <h3>Wow! 😮 You found a new Landmark Stamp! 🤩</h3>
+        <div class="stamp-background">
+            <img id="new-stamp-img">
+            <h2 id="new-stamp-description"></h2>
+        </div>
         <div>
             <button id="new-stamp-btn" class="sound-btn" type="button">Continue!</button>
         </div>
     </dialog>
 
     <dialog id="show-stamps">
-        <h2>My Stamps</h2>
+        <h2 id="stamps-collection-title">My Stamps</h2>
 
         <div class="stamps-collection">
         </div>

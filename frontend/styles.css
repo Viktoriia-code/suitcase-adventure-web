@@ -96,9 +96,9 @@ main {
 
 
 #map {
-  height: 700px;
+  height: calc(100vh - 125px);
   width: 100%;
-  border-radius: 5%;
+  border-radius: 2%;
 }
 
 
@@ -203,7 +203,6 @@ main {
   max-width: 100px;
   overflow: auto;
   text-overflow: clip;
-  white-space: wrap;
 }
 
 #wiki-link {
@@ -217,11 +216,10 @@ main {
   text-decoration: none;
 }
 
-
-
+/* LOGIN PAGE */
 .login-wrapper {
   margin: 10% auto;
-  box-shadow: rgba(149, 157, 165, 0.9) 0px 8px 24px;
+  box-shadow: rgba(149, 157, 165, 0.9) 0 8px 24px;
   border-radius: 5px;
 }
 
@@ -332,10 +330,22 @@ dialog {
   color: white;
   padding: 40px;
   text-align: center;
+  border-radius: 2%;
 }
 
 dialog button {
   cursor: pointer;
+  background-color: #c0dcfd;
+  color: black;
+  border: 1px #000089 solid;
+  font-size: 18px;
+  padding: 10px 50px;
+  font-weight: 600;
+  transition: all ease-in-out .3s;
+}
+
+dialog button:hover {
+  background-color: #fff278;
 }
 
 .btn_wrapper {
@@ -355,6 +365,20 @@ dialog p, dialog h3 {
 #new-stamp-img {
   margin-top: 15px;
   width: 50%;
+}
+
+.stamp-background {
+  background-color: #0685f8;
+  width: 80%;
+  margin: auto;
+  margin-top: 15px;
+  box-sizing: border-box;
+  /* cursor: pointer; */
+  border: 1px #ccc solid;
+  padding: 0.5rem;
+  border-radius: 6px;
+  box-shadow: 3px 6px 6px #ccc;
+  transition: all 0.2s ease-in-out;
 }
 
 #new-stamp-btn {
@@ -401,6 +425,57 @@ margin-top: 15px;
 #collected-stamp-img {
   width: 50%;
 }
+
+#game-dialog {
+  max-width: 600px;
+}
+
+.stat-data {
+  text-align: center;
+  font-size: 28px;
+  background-color: #0070e9;
+  padding: 7px 7px 7px 4px;
+}
+
+dialog::backdrop {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+.close-btn {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+
 
 @media only screen and (max-width: 1200px) {
     .stamp-info {
