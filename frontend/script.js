@@ -39,6 +39,50 @@ song.addEventListener('ended', () => {
     song.play();
 });
 
+// Function to open the modal with custom title and content
+function openModal(title, content) {
+    const modal = document.getElementById('modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalContent = document.getElementById('modal-content');
+
+    modalTitle.textContent = title;
+    modalContent.innerHTML = content;
+
+    modal.style.display = 'block';
+}
+
+// Function to close the modal
+function closeModal() {
+    const modal = document.getElementById('modal');
+    modal.style.display = 'none';
+}
+
+// Event listener for the rules button to open the modal
+document.getElementById('rules').addEventListener('click', function() {
+    const rulesContent = `
+        <h2>Game Rules</h2>
+        <p>
+            Game aim: You're a lost suitcase. Your task is to find your owner in one of the largest airports in
+            the world in a minimum number of flights. Choose the airport carefully – the fewer flights, the less
+            emissions into the atmosphere!
+            <br><br>
+            Game play: To select an airport, follow the prompts of the game. The distance to the owner will tell
+            you which continent, country, or airport is better to choose. To save your progress and go to the
+            main menu, enter "menu" at any time when choosing a direction.
+            <br><br>
+            Winning: The game ends if you guess the location of your owner. After that, you can choose to start
+            a new game or return to the main menu.
+            <br><br>
+            Statistics: To compare your result with the average results of all players, select the "Statistics"
+            option in the header menu.
+            <br><br>
+            Music: To turn off/turn on background music, use the option provided in the header menu.
+        </p>
+    `;
+    openModal('Game Rules', rulesContent);
+});
+
+
 // --------------------- MAIN LOOP ------------------------------
 
 // main loop, based on buttons on the map
