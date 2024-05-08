@@ -1,4 +1,4 @@
-# 🎒 Welcome to the Web Version of Suitcase Adventure! 🌍
+# 🎒 Suitcase Adventure (Web Version) 🌍
 
 Embark on a journey like no other as you explore the world while learning about the impact of your travels on the environment! 🌱✈️
 
