@@ -57,3 +57,9 @@ DB_NAME=''
 DB_USER=''
 WEATHER_API_KEY=''
 ```
+
+## :file_folder: Database architecture:
+<p align="center">
+  <img src="https://github.com/Viktoriia-code/suitcase-adventure-web/assets/43078402/21d95ade-ba8b-4815-80ad-fde65ea655c7" alt="image" width="600">
+  <img src="https://github.com/Viktoriia-code/suitcase-adventure-web/assets/43078402/1ffe4bc3-d0c6-46ac-aefc-adc8685e874e" alt="image" width="600">
+</p>
