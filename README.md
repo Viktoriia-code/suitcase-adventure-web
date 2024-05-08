@@ -43,7 +43,7 @@ pip install -r requirements.txt
 ```
 
 ## :closed_lock_with_key: ENV file:
-Create at the main folder file with name ".env". Add your database password (DB_PASSWORD) and OpenWeatherMap API key (WEATHER_API_KEY), host and port to the file.
+Create at the main folder file with name ".env". Add your database password (DB_PASSWORD), OpenWeatherMap API key (WEATHER_API_KEY), host and port to the file.
 <p align="center">
   <img src="https://github.com/Viktoriia-code/suitcase-adventure-web/assets/43078402/b295b03b-d839-4c13-86d7-5f2f35f70b22" alt="image" width="600">
 </p>
