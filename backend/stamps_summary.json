@@ -114,5 +114,26 @@
         "name": "Voortrekker Monument",
         "img": "voortrekker.png",
         "source": "https://en.wikipedia.org/wiki/Voortrekker_Monument"
+    },
+
+    "Singapore": {
+        "country_code": "sg",
+        "name": "Merlion",
+        "img": "merlion.png",
+        "source": "https://en.wikipedia.org/wiki/Merlion"
+    },
+
+    "Perú": {
+        "country_code": "pe",
+        "name": "Machu Picchu",
+        "img": "machu-picchu.png",
+        "source": "https://en.wikipedia.org/wiki/Machu_Picchu"
+    },
+
+    "Greece": {
+        "country_code": "gr",
+        "name": "Mount Olympus",
+        "img": "olympus.png",
+        "source": "https://en.wikipedia.org/wiki/Mount_Olympus"
     }
 }

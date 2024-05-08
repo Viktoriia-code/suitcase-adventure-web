@@ -1,5 +1,5 @@
 
-airports_from_each_continent = 8
+airports_from_each_continent = 5 + 3
 
 small_distance = 1100
 medium_distance = 2000
