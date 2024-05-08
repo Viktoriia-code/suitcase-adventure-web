@@ -304,7 +304,7 @@ function updateDynamicData(data) {
         </td>
         <td>
             <span>${data.weather != null ? data.weather.temp.toFixed() : 'No temperature found'}°C</span>
-            <img src="${data.weather != null ? data.weather.icon : '#'}" alt="Weather Icon" title="${data.weather != null ? data.weather.description : 'No weather found'}">
+            <img src="${data.weather != null ? data.weather.icon : '#'}" alt="Weather Icon" title="${data.weather != null ? data.weather.description : 'No weather found'}" class="weather-img">
         </td>
     </tr>`;
 

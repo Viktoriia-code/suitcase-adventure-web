@@ -27,7 +27,7 @@ h2 {
 header {
   background: linear-gradient(90deg, hsla(212, 100%, 88%, 1) 1%, hsla(0, 0%, 100%, 1) 51%, hsla(55, 100%, 65%, 1) 100%);
   padding: 10px;
-  margin-bottom: 2rem;
+  margin-bottom: 1.8rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -71,14 +71,45 @@ header {
 
 /* The slider itself */
 .slider {
-  width: 70px; /* Full-width */
+  -webkit-appearance: none;  /* Override default CSS styles */
+  appearance: none;
+  width: 70px;
+  height: 1px;
+  margin: 0;
+  padding: 3px 0px;
+  border: none;
+  background: #c0c0c0a9;
+  outline: none;
+  opacity: 0.8;
+  -webkit-transition: .2s;
   transition: opacity .2s;
+}
+
+/* Mouse-over effects */
+.slider:hover {
+  opacity: 1;
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10px;
+  height: 20px;
+  border-radius: 20%;
+  background: #000089;
+  cursor: pointer; 
 }
 
 
 .slider::-moz-range-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10px;
+  height: 20px;
+  border-radius: 20%;
   background: #000089;
-  cursor: pointer;
+  cursor: pointer; 
 }
 
 main {
@@ -128,11 +159,10 @@ main {
 }
 
 .container {
-  margin-left: 4rem;
-  width: 33%;
+  width: 35%;
   background-color: #000089;
   border-radius: 2%;
-  padding: 1%
+  padding: 1% 20px;
 }
 
 
@@ -185,8 +215,11 @@ main {
   margin-left: 3%
 }
 
-
-
+.weather-img {
+  height: 50px;
+  transform: scale(1.8);
+  margin-left: 25px;
+}
 
 #distance {
   text-align: center; 
@@ -218,9 +251,11 @@ main {
 
 /* LOGIN PAGE */
 .login-wrapper {
-  margin: 10% auto;
+  margin: 8% auto 0 auto;
   box-shadow: rgba(149, 157, 165, 0.9) 0 8px 24px;
   border-radius: 5px;
+  max-width: 420px;
+  width: 100%;
 }
 
 .title {
@@ -232,10 +267,13 @@ main {
 }
 .user-form {
   background-color: #0070e9;
-  padding: 30px;
+  padding: 30px 20px;
   color: white;
   border-radius: 0 0 5px 5px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 button, input {
@@ -261,16 +299,13 @@ button, input {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-bottom: 18px;
 }
 .login-table tr {
   display: flex;
   width: 100%;
   justify-content: space-between;
   align-items: center;
-}
-.text-input {
-  width: 100%;
+  gap: 10px;
 }
 
 #login-title h2 {
@@ -351,7 +386,6 @@ dialog button:hover {
 .btn_wrapper {
   display: flex;
   justify-content: space-around;
-  margin-top: 30px;
 }
 
 dialog h2 {
@@ -428,6 +462,10 @@ margin-top: 15px;
 
 #game-dialog {
   max-width: 600px;
+}
+
+#game-dialog button {
+  margin-top: 5%;
 }
 
 .stat-data {

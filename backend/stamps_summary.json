@@ -79,6 +79,40 @@
         "name": "Christ the Redeemer",
         "img": "christ.png",
         "source": "https://en.wikipedia.org/wiki/Christ_the_Redeemer_(statue)"
-    }
+    },
 
+    "Ukraine": {
+        "country_code": "ua",
+        "name": "St Andrew's Church",
+        "img": "church.png",
+        "source": "https://en.wikipedia.org/wiki/St_Andrew%27s_Church,_Kyiv"
+    },
+
+    "Japan": {
+        "country_code": "jp",
+        "name": "Mount Fuji",
+        "img": "fuji.png",
+        "source": "https://en.wikipedia.org/wiki/Mount_Fuji"
+    },
+
+    "Morocco": {
+        "country_code": "ma",
+        "name": "Hassan II Mosque",
+        "img": "casablanca.png",
+        "source": "https://en.wikipedia.org/wiki/Hassan_II_Mosque"
+    },
+
+    "Egypt": {
+        "country_code": "eg",
+        "name": "Egyptian pyramids",
+        "img": "pyramids.png",
+        "source": "https://en.wikipedia.org/wiki/Egyptian_pyramids"
+    },
+
+    "South Africa": {
+        "country_code": "za",
+        "name": "Voortrekker Monument",
+        "img": "voortrekker.png",
+        "source": "https://en.wikipedia.org/wiki/Voortrekker_Monument"
+    }
 }
