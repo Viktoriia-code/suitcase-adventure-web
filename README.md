@@ -12,6 +12,7 @@ Players explore global destinations, aiming to reduce their carbon footprint whi
 The game challenges players to make eco-friendly travel choices, providing educational tips and encouraging strategic decisions to minimize environmental impact.
 
 <p align="center">
+  <img src="https://github.com/Viktoriia-code/suitcase-adventure-web/assets/43078402/76b73138-ff5d-4621-9f1b-68c8c23467c4" alt="image" width="800">
   <img src="https://github.com/Viktoriia-code/suitcase-adventure-web/assets/43078402/9da5d26f-737e-4c68-92fa-2b29153d1c91" alt="image" width="800">
 </p>
 
