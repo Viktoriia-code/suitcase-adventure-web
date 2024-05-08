@@ -38,107 +38,118 @@ song.addEventListener('ended', () => {
     song.play();
 });
 
+// If the page is loaded from a cache, reload the page
+window.addEventListener( "pageshow", function (event) {
+    if (!event.persisted) {
+        return;
+    }
+
+    window.location.reload();
+});
+
 // --------------------- MAIN LOOP ------------------------------
 
 // main loop, based on buttons on the map
 // after each click (other words - after choosing the airport where to fly), the entire page is updated to make it easier to track the moment when the player reaches the goal 
 
 async function gameSetup(gameID, username, password) {
-    try {
-        showLoader();
+    const gameInfo = await getGameData(gameID);
+    const airportsList = await getAirportList(gameID);
+    const airportData = await getAirportData(gameInfo.current_location);
 
-        const gameInfo = await getGameData(gameID);
-        const airportsList = await getAirportList(gameID);
-        const airportData = await getAirportData(gameInfo.current_location);
+    updatePlayerInfoOnPage(gameInfo);
+    updateDynamicData(airportData);
 
-        updatePlayerInfoOnPage(gameInfo);
-        updateDynamicData(airportData);
+    // stamps check
+    playerStampsUpdateAndShow(gameInfo.airport_country).catch(handleError);
 
-        hideLoader();
+    airportMarkers.clearLayers();
 
-        // stamps check
-        playerStampsUpdateAndShow(gameInfo.airport_country);
-      
-        airportMarkers.clearLayers();
+    // win case
+    if (gameInfo.target_location === gameInfo.current_location) {
+        user_wins(gameInfo, username, password);
+    }
 
-        // win case
-        if (gameInfo.target_location === gameInfo.current_location) {
-            user_wins(gameInfo, username, password);
-        }
+    // Plot markers on the map
+    airportsList.forEach(airport => {
+        var marker = L.marker([airport.lat, airport.long]).addTo(map);
+        airportMarkers.addLayer(marker);
 
-        // Plot markers on the map
-        airportsList.forEach(airport => {
-            var marker = L.marker([airport.lat, airport.long]).addTo(map);
-            airportMarkers.addLayer(marker);
+        if (airport.code === gameInfo.current_location) {
 
-            if (airport.code === gameInfo.current_location) {
+            map.setView([airport.lat, airport.long], 2);
 
-                map.setView([airport.lat, airport.long], 2);
+            const popupContent = document.createElement('div');
 
-                const popupContent = document.createElement('div');
+            const h4 = document.createElement('h4');
+            h4.innerHTML = airport.name;
 
-                const h4 = document.createElement('h4');
-                h4.innerHTML = airport.name;
+            const h5 = document.createElement('h5');
+            h5.classList.add('GEO');
+            h5.innerHTML = `You are here!`;
 
-                const h5 = document.createElement('h5');
-                h5.classList.add('GEO');
-                h5.innerHTML = `You are here!`;
+            const pCity = document.createElement('p');
+            pCity.innerHTML = `City | ${airport.city}`;
 
-                const pCity = document.createElement('p');
-                pCity.innerHTML = `City | ${airport.city}`;
+            const pCountry = document.createElement('p');
+            pCountry.innerHTML = `Country | ${airport.country}`;
 
-                const pCountry = document.createElement('p');
-                pCountry.innerHTML = `Country | ${airport.country}`;
+            popupContent.append(h4);
+            popupContent.append(h5);
+            popupContent.append(pCity);
+            popupContent.append(pCountry);
 
-                popupContent.append(h4);
-                popupContent.append(h5);
-                popupContent.append(pCity);
-                popupContent.append(pCountry);
+            marker.bindPopup(popupContent);
+            marker.setIcon(bagIcon);
+        } else {
+            const popupContent = document.createElement('div');
 
-                marker.bindPopup(popupContent);
-                marker.setIcon(bagIcon);
-            } else {
-                const popupContent = document.createElement('div');
+            const h4 = document.createElement('h4');
+            h4.innerHTML = airport.name;
 
-                const h4 = document.createElement('h4');
-                h4.innerHTML = airport.name;
+            const goButton = document.createElement('button');
+            goButton.classList.add('fly-button');
+            goButton.innerHTML = 'Fly here';
 
-                const goButton = document.createElement('button');
-                goButton.classList.add('fly-button');
-                goButton.innerHTML = 'Fly here';
+            const pCity = document.createElement('p');
+            pCity.innerHTML = `City | ${airport.city}`;
 
-                const pCity = document.createElement('p');
-                pCity.innerHTML = `City | ${airport.city}`;
+            const pCountry = document.createElement('p');
+            pCountry.innerHTML = `Country | ${airport.country}`;
 
-                const pCountry = document.createElement('p');
-                pCountry.innerHTML = `Country | ${airport.country}`;
+            popupContent.append(h4);
+            popupContent.append(goButton);
+            popupContent.append(pCity);
+            popupContent.append(pCountry);
 
-                popupContent.append(h4);
-                popupContent.append(goButton);
-                popupContent.append(pCity);
-                popupContent.append(pCountry);
+            marker.bindPopup(popupContent);
 
-                marker.bindPopup(popupContent);
+            marker.setIcon(airportIcon);
 
-                marker.setIcon(airportIcon);
+            // very important - here we can later trace if the goal is reached
+            goButton.addEventListener('click', async function() {
 
-                // very important - here we can later trace if the goal is reached
-                goButton.addEventListener('click', async function () {
+                try {
+                    showLoader();
+
                     // sound for 2-3 sec fly
                     let flySound = new Audio('assets/sounds/fly3.wav');
                     flySound.volume = 0.5;
                     flySound.currentTime = 1.3;
                     sounds && flySound.play();
 
-                    const result = await updatePlayerLocation(gameID, airport.code); // returns True if the same locations, or False if not
+                    await updatePlayerLocation(gameID, airport.code);
 
                     await gameSetup(gameID, username, password);
-                });
-            }
-        });
-    } catch (error) {
-        console.log(error);
-    }
+                } catch (error) {
+                    handleError(error);
+                }
+
+            });
+        }
+    });
+
+    hideLoader();
 }
 
 // --------------------- API GET FUNCTIONS ------------------------------
@@ -262,7 +273,7 @@ function addSoundsToButtons() {
             let clickSound = new Audio('assets/sounds/click.wav');
             clickSound.volume = 0.3;
 
-            sounds && clickSound.play(); 
+            sounds && clickSound.play();
 
         });
     }
@@ -282,7 +293,7 @@ function updateDynamicData(data) {
             Local Time:
         </td>
         <td>
-            ${data.time}
+            ${data.time != null ? data.time : 'No time found'}
         </td>
     </tr>`;
 
@@ -292,13 +303,13 @@ function updateDynamicData(data) {
             Weather:
         </td>
         <td>
-            <span>${data.weather.temp.toFixed()}°C</span>
-            <img src="${data.weather.icon}" alt="Weather Icon" title="${data.weather.description}">
+            <span>${data.weather != null ? data.weather.temp.toFixed() : 'No temperature found'}°C</span>
+            <img src="${data.weather != null ? data.weather.icon : '#'}" alt="Weather Icon" title="${data.weather != null ? data.weather.description : 'No weather found'}">
         </td>
     </tr>`;
 
-    document.getElementById("wikipedia").innerHTML = `<td>${data.wiki.text}</td>`;
-    document.getElementById("wiki-link").href = data.wiki.source;
+    document.getElementById("wikipedia").innerHTML = `<td>${data.wiki != null ? data.wiki.text : 'No information found for this airport.'}</td>`;
+    document.getElementById("wiki-link").href = (data.wiki != null ? data.wiki.source : '#');
 
     table.innerHTML += a_time + a_weather;
 
@@ -311,7 +322,7 @@ function promptNewStamp(stamp) {
     const newStampDesc = document.getElementById("new-stamp-description");
 
     newStampImg.src = `assets/stamps/${stamp.img}`;
-    newStampDesc.innerHTML = `${stamp.name} <a style="text-decoration:none" href="${stamp.source}">🔗</a>`;   
+    newStampDesc.innerHTML = `${stamp.name} <a style="text-decoration:none" href="${stamp.source}">🔗</a>`;
 
     dialog.showModal();
 
@@ -393,22 +404,24 @@ function promptContinueOrNewGame(previousGameId, username, password) {
     dialog.appendChild(btn_wrapper);
 
     dialog.showModal();
+
     // Event listener for "New game" button
     new_game_btn.addEventListener("click", async () => {
+        dialog.close();
 
-        const gameId = await createGame(username, password);
-        if (gameId === null) {
-            return;
+        try {
+            const gameId = await createGame(username, password);
+            await gameSetup(gameId, username, password);
+
+        } catch (error) {
+            handleError(error);
         }
 
-        await gameSetup(gameId, username, password)
-
-        dialog.close();
     });
 
     // Event listener for "Continue" button
     continue_btn.addEventListener("click", () => {
-        gameSetup(previousGameId, username, password)
+        gameSetup(previousGameId, username, password).catch(handleError);
 
         dialog.close();
     });
@@ -419,26 +432,8 @@ function promptContinueOrNewGame(previousGameId, username, password) {
 }
 
 async function createGame(username, password) {
-    try {
-        const response = await fetch(`${apiUrl}/creategame/${username}/${password}`);
-        if (!response.ok) {
-            const responseText = await response.text();
-
-            alert('Server error:\n' + responseText)
-            console.error('Server error: ' + responseText);
-
-            return null;
-        }
-
-        const json = await response.json();
-        return json.game;
-
-    } catch (error) {
-        alert('Server connection failed: ' + error.message)
-        console.error('Server connection failed: ' + error.message);
-    }
-
-    return null;
+    const response = await getJsonData(`${apiUrl}/creategame/${username}/${password}`);
+    return response.game;
 }
 
 function check_user_login() {
@@ -480,22 +475,26 @@ function user_wins(playerInfo, username, password) {
     dialog.appendChild(btn_wrapper);
 
     dialog.showModal();
+
     // Event listener for "New game" button
     new_game_btn.addEventListener("click", async () => {
+        dialog.close();
+        showLoader();
 
-        const gameId = await createGame(username, password);
-        if (gameId === null) {
-            return;
+        try {
+            const gameId = await createGame(username, password);
+            await gameSetup(gameId, username, password);
+
+        } catch (error) {
+            handleError(error);
         }
 
-        await gameSetup(gameId, username, password)
-
-        dialog.close();
     });
 
     // Event listener for "Exit" button
     exit_btn.addEventListener("click", () => {
         dialog.close();
+
         // Delete data from localStorage
         localStorage.removeItem('userName');
         localStorage.removeItem('userPassword');
@@ -509,6 +508,8 @@ function user_wins(playerInfo, username, password) {
 async function main() {
     check_user_login();
 
+    showLoader();
+
     const username = JSON.parse(localStorage.getItem('userName'));
     const password = JSON.parse(localStorage.getItem('userPassword'));
 
@@ -520,16 +521,44 @@ async function main() {
 
     if (!gameData.exists) {
         const gameId = await createGame(username, password);
-        if (gameId === null) {
-            return;
-        }
-
         await gameSetup(gameId, username, password);
 
         return;
     }
-  
+
     promptContinueOrNewGame(gameData.game_id, username, password);
 }
 
-main();
+function handleError(error) {
+    let errorMessage = error.message;
+    if (errorMessage === 'Failed to fetch') {
+        errorMessage = 'Server connection failed';
+    }
+
+    const dialog = document.getElementById("game-dialog");
+    dialog.innerHTML = ''; // Reset the dialog content
+
+    const titleElement = document.createElement('h2');
+    titleElement.appendChild(document.createTextNode('An Error Happened'));
+    dialog.appendChild(titleElement);
+
+    const contentElement = document.createElement('p');
+    contentElement.appendChild(document.createTextNode(`Error message: ${errorMessage}`));
+    dialog.appendChild(contentElement);
+
+    const btnWrapper = document.createElement('div');
+    btnWrapper.classList.add('btn_wrapper');
+
+    const closeBtn = document.createElement('button');
+    closeBtn.appendChild(document.createTextNode('Close'));
+    closeBtn.addEventListener('click', () => {
+        dialog.close();
+    });
+    btnWrapper.appendChild(closeBtn);
+
+    dialog.appendChild(btnWrapper);
+
+    dialog.showModal();
+}
+
+main().catch(handleError);
