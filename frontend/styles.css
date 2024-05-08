@@ -71,14 +71,45 @@ header {
 
 /* The slider itself */
 .slider {
-  width: 70px; /* Full-width */
+  -webkit-appearance: none;  /* Override default CSS styles */
+  appearance: none;
+  width: 70px;
+  height: 1px;
+  margin: 0;
+  padding: 3px 0px;
+  border: none;
+  background: #c0c0c0a9;
+  outline: none;
+  opacity: 0.8;
+  -webkit-transition: .2s;
   transition: opacity .2s;
+}
+
+/* Mouse-over effects */
+.slider:hover {
+  opacity: 1;
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10px;
+  height: 20px;
+  border-radius: 20%;
+  background: #000089;
+  cursor: pointer; 
 }
 
 
 .slider::-moz-range-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10px;
+  height: 20px;
+  border-radius: 20%;
   background: #000089;
-  cursor: pointer;
+  cursor: pointer; 
 }
 
 main {
