@@ -123,11 +123,11 @@
         "source": "https://en.wikipedia.org/wiki/Merlion"
     },
 
-    "Perú": {
-        "country_code": "pe",
-        "name": "Machu Picchu",
-        "img": "machu-picchu.png",
-        "source": "https://en.wikipedia.org/wiki/Machu_Picchu"
+    "Spain": {
+        "country_code": "es",
+        "name": "Sagrada Familia",
+        "img": "sagrada-familia.png",
+        "source": "https://en.wikipedia.org/wiki/Sagrada_Fam%C3%ADlia"
     },
 
     "Greece": {

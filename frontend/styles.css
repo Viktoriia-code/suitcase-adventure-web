@@ -436,6 +436,10 @@ margin-top: 15px;
   gap: 2rem;
 }
 
+.stamps-collection h3 {
+  margin: 0 auto;
+}
+
 .stamp-info {
   background-color: #0685f8;
   width: calc(100% / 5 - 2rem);
