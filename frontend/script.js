@@ -293,7 +293,7 @@ function updateDynamicData(data) {
         </td>
         <td>
             <span>${data.weather.temp.toFixed()}°C</span>
-            <img src="${data.weather.icon}" alt="Weather Icon" title="${data.weather.description}">
+            <img src="${data.weather.icon}" alt="Weather Icon" title="${data.weather.description}" class="weather-img">
         </td>
     </tr>`;
 
