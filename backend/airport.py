@@ -52,6 +52,7 @@ class Airport:
         url = "https://api.openweathermap.org/data/2.5/weather"
 
         answer = requests.get(url=url, params=params)
+        answer.raise_for_status()
         data = answer.json()
 
         return {
