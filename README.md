@@ -12,13 +12,14 @@ Players explore global destinations, aiming to reduce their carbon footprint whi
 The game challenges players to make eco-friendly travel choices, providing educational tips and encouraging strategic decisions to minimize environmental impact.
 
 <p align="center">
-  <img src="https://github.com/Viktoriia-code/suitcase-adventure-web/assets/43078402/9da5d26f-737e-4c68-92fa-2b29153d1c91" alt="image" width="600">
+  <img src="https://github.com/Viktoriia-code/suitcase-adventure-web/assets/43078402/9da5d26f-737e-4c68-92fa-2b29153d1c91" alt="image" width="800">
 </p>
 
 ## :floppy_disk: Technical stack overview
 * Frontend: HTML, CSS, JavaScript
 * Backend: Python, Flask
 * Database: SQL
+* 3rd party API: [Open Weather API](https://openweathermap.org/api)
 
 ## :electric_plug: Modules
 * Flask
