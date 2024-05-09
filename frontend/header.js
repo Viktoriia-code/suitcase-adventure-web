@@ -64,17 +64,20 @@ function openRules() {
         dialog.innerHTML += '<h2>📜 Game Rules</h2>';
 
         dialog.innerHTML += `<p>🎯 Game aim: You're a lost suitcase. Your task is to find your owner in one of the largest airports in the world in a minimum number of flights. Choose the airport carefully – the fewer flights, the less emissions into the atmosphere!</span>` +
-            `<p>🎮 Game play: To select an airport, follow the prompts of the game. The distance to the owner will tell
-            you which continent, country, or airport is better to choose. To save your progress and go to the
-            main menu, enter "menu" at any time when choosing a direction.
+            `<p>🎮 Game play: To select an airport, use the map. The distance to the owner will tell
+            you which airport is better to choose. To save your progress and exit from game, just select "Exit" option from the header menu at any time.
         </p><p>
             🏆 Winning: The game ends if you guess the location of your owner. After that, you can choose to start
-            a new game or return to the main menu.
+            a new game or exit.
+        </p><p>
+            🖼️ Travel Stamps: Travel and collect World Landmark Stamps into your unique collection. The more games you play, the more likely you collect all travel stamps!
+        </p><p>
+            🌐 Links: Select link button 🔗 to learn more about the landmark from collected stamp or the airport you visit. 
         </p><p>
             📊 Statistics: To compare your result with the average results of all players, select the "Statistics"
             option in the header menu.
         </p><p>
-            🔊 Music: To turn off/turn on background music, use the option provided in the header menu.
+            🔊 Music / Sounds: To turn off/on background music or sounds, use the options provided in the header menu.
         </p>`;
         let closeBtn = document.createElement('button');
         closeBtn.innerText = 'Close';
